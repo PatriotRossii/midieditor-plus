@@ -37,8 +37,6 @@
 #include <QMessageBox>
 
 
-//QList<MidiEvent*>* EventTool::copiedEvents = new QList<MidiEvent*>;
-
 int EventTool::_pasteChannel = -1;
 int EventTool::_pasteTrack = -2;
 
@@ -206,7 +204,7 @@ void EventTool::copyAction()
         }
         
         QByteArray copyFileBytes = copyFile.toByteArray();
-        int MAX_COPY_SIZE = 1073741824; //1GB
+        constexpr int MAX_COPY_SIZE = 1073741824; //1GB
         if (copyFileBytes.size() > MAX_COPY_SIZE){
             QMessageBox msgBox;
             msgBox.setText("Copied data too large...");

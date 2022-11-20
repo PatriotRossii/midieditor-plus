@@ -502,7 +502,6 @@ MainWindow::MainWindow(QString initFile)
     } else {
         colorsByTrack();
     }
-    //copiedEventsChanged();
     setAcceptDrops(true);
 
     currentTweakTarget = new TimeTweakTarget(this);
@@ -3237,13 +3236,6 @@ void MainWindow::toolChanged()
     _miscWidget->update();
     mw_matrixWidget->update();
 }
-
-/*void MainWindow::copiedEventsChanged()
-{
-    bool enable = true;//EventTool::copiedEvents->size() > 0;
-    _pasteAction->setEnabled(enable);
-    pasteActionTB->setEnabled(enable);
-}*/
 
 void MainWindow::updateDetected(Update* update)
 {

@@ -55,8 +55,6 @@ public:
     static void enableMagnet(bool enable);
     static bool magnetEnabled();
 
-    //static QList<MidiEvent*>* copiedEvents;
-
 protected:
     static bool isCutAction;
     static int _pasteChannel;

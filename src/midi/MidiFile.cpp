@@ -37,7 +37,6 @@
 #include "math.h"
 
 #include <QtCore/qmath.h>
-#include <iostream>
 
 int MidiFile::defaultTimePerQuarter = 192;
 
@@ -87,9 +86,9 @@ MidiFile::MidiFile()
     calcMaxTime();
 }
 
-void MidiFile::initialize(QDataStream* stream, bool* ok, QStringList* log) {
+void MidiFile::initialize(QDataStream* stream, bool* ok, QStringList* log)
+{
     _pauseTick = -1;
-    _saved = false;
     midiTicks = 0;
     _cursorTick = 0;
     prot = new Protocol(this);
@@ -115,12 +114,12 @@ void MidiFile::initialize(QDataStream* stream, bool* ok, QStringList* log) {
 
 MidiFile::MidiFile(QString path, bool* ok, QStringList* log)
 {
-
     if (!log) {
         log = new QStringList();
     }
 
     _path = path;
+    _saved = true;
     QFile* f = new QFile(path);
 
     if (!f->open(QIODevice::ReadOnly)) {
@@ -136,11 +135,11 @@ MidiFile::MidiFile(QString path, bool* ok, QStringList* log)
 
 MidiFile::MidiFile(QByteArray& raw_midi, bool* ok, QStringList* log)
 {
-
     if (!log) {
         log = new QStringList();
     }
 
+    _saved = false;
     QDataStream* stream = new QDataStream(raw_midi);
     this->initialize(stream, ok, log);
 }
