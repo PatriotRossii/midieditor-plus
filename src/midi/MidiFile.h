@@ -37,13 +37,15 @@ class MidiFile : public QObject, public ProtocolEntry {
 
     Q_OBJECT
 
-  public:
-    MidiFile(QString path, bool *ok, QStringList *log = 0);
+public:
+    MidiFile(QByteArray& raw_midi, bool* ok, QStringList* log);
+    MidiFile(QString path, bool* ok, QStringList* log = 0);
     MidiFile();
     // needed to protocol fileLength
     MidiFile(int maxTime, Protocol *p);
     bool save(QString path);
-    QByteArray writeDeltaTime(int time);
+    QByteArray toByteArray();
+    static QByteArray writeDeltaTime(int time);
     int maxTime();
     int endTick();
     int timeMS(int midiTime);
@@ -58,7 +60,8 @@ class MidiFile : public QObject, public ProtocolEntry {
 
     QList<MidiEvent *> *eventsBetween(int start, int end);
     int ticksPerQuarter();
-    QMultiMap<int, MidiEvent *> *channelEvents(int channel);
+    void setTicksPerQuarter(int timePerQuarter);
+    QMultiMap<int, MidiEvent*>* channelEvents(int channel);
 
     Protocol *protocol();
     MidiChannel *channel(int i);
@@ -109,10 +112,12 @@ class MidiFile : public QObject, public ProtocolEntry {
     void recalcWidgetSize();
     void trackChanged();
 
-  private:
-    bool readMidiFile(QDataStream *content, QStringList *log);
-    bool readTrack(QDataStream *content, int num, QStringList *log);
-    int deltaTime(QDataStream *content);
+private:
+    void initialize(QDataStream* stream, bool* ok, QStringList* log);
+
+    bool readMidiFile(QDataStream* content, QStringList* log);
+    bool readTrack(QDataStream* content, int num, QStringList* log);
+    int deltaTime(QDataStream* content);
 
     int timePerQuarter;
     MidiChannel *channels[19];
