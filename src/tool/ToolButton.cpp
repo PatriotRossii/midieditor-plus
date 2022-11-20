@@ -19,9 +19,7 @@
 #include "ToolButton.h"
 #include "Tool.h"
 
-ToolButton::ToolButton(Tool* tool, QKeySequence sequence, QWidget* parent)
-    : QAction(parent)
-{
+ToolButton::ToolButton(Tool *tool, QKeySequence sequence, QWidget *parent) : QAction(parent) {
     button_tool = tool;
     tool->setButton(this);
     setText(button_tool->toolTip());
@@ -32,12 +30,10 @@ ToolButton::ToolButton(Tool* tool, QKeySequence sequence, QWidget* parent)
     setShortcut(sequence);
 }
 
-void ToolButton::buttonClick()
-{
+void ToolButton::buttonClick() {
     button_tool->buttonClick();
 }
 
-void ToolButton::releaseButton()
-{
+void ToolButton::releaseButton() {
     button_tool->buttonClick();
 }

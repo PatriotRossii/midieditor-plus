@@ -1,24 +1,21 @@
 #include "Appearance.h"
 
-QMap<int, QColor*> Appearance::channelColors = QMap<int, QColor*>();
-QMap<int, QColor*> Appearance::trackColors = QMap<int, QColor*>();
+QMap<int, QColor *> Appearance::channelColors = QMap<int, QColor *>();
+QMap<int, QColor *> Appearance::trackColors = QMap<int, QColor *>();
 int Appearance::_opacity = 100;
 
-void Appearance::init(QSettings *settings){
+void Appearance::init(QSettings *settings) {
     for (int channel = 0; channel < 17; channel++) {
         channelColors.insert(channel,
-                             decode("channel_color_" + QString::number(channel),
-                                    settings, defaultColor(channel)));
+                             decode("channel_color_" + QString::number(channel), settings, defaultColor(channel)));
     }
     for (int track = 0; track < 17; track++) {
-        trackColors.insert(track,
-                           decode("track_color_" + QString::number(track),
-                                  settings, defaultColor(track)));
+        trackColors.insert(track, decode("track_color_" + QString::number(track), settings, defaultColor(track)));
     }
     _opacity = settings->value("appearance_opacity", 100).toInt();
 }
 
-QColor *Appearance::channelColor(int channel){
+QColor *Appearance::channelColor(int channel) {
     QColor *color = channelColors[channelToColorIndex(channel)];
     color->setAlpha(_opacity * 255 / 100);
     return color;
@@ -41,7 +38,7 @@ void Appearance::writeSettings(QSettings *settings) {
 }
 
 QColor *Appearance::defaultColor(int n) {
-    QColor* color;
+    QColor *color;
 
     switch (n) {
     case 0: {
@@ -116,21 +113,21 @@ QColor *Appearance::defaultColor(int n) {
     return color;
 }
 
-QColor *Appearance::decode(QString name, QSettings *settings, QColor *defaultColor){
-   bool ok;
-   int r = settings->value(name + "_r").toInt(&ok);
-   if (!ok) {
-       return new QColor(*defaultColor);
-   }
-   int g = settings->value(name + "_g").toInt(&ok);
-   if (!ok) {
-       return defaultColor;
-   }
-   int b = settings->value(name + "_b").toInt(&ok);
-   if (!ok) {
-       return defaultColor;
-   }
-   return new QColor(r, g, b);
+QColor *Appearance::decode(QString name, QSettings *settings, QColor *defaultColor) {
+    bool ok;
+    int r = settings->value(name + "_r").toInt(&ok);
+    if (!ok) {
+        return new QColor(*defaultColor);
+    }
+    int g = settings->value(name + "_g").toInt(&ok);
+    if (!ok) {
+        return defaultColor;
+    }
+    int b = settings->value(name + "_b").toInt(&ok);
+    if (!ok) {
+        return defaultColor;
+    }
+    return new QColor(r, g, b);
 }
 
 void Appearance::write(QString name, QSettings *settings, QColor *color) {
@@ -143,14 +140,14 @@ void Appearance::setTrackColor(int track, QColor color) {
     trackColors[trackToColorIndex(track)] = new QColor(color);
 }
 
-void Appearance::setChannelColor(int channel, QColor color){
+void Appearance::setChannelColor(int channel, QColor color) {
     channelColors[channelToColorIndex(channel)] = new QColor(color);
 }
 
-int Appearance::trackToColorIndex(int track){
-    int mod = (track-1) %17;
+int Appearance::trackToColorIndex(int track) {
+    int mod = (track - 1) % 17;
     if (mod < 0) {
-        mod+=17;
+        mod += 17;
     }
     return mod;
 }
@@ -171,10 +168,10 @@ void Appearance::reset() {
     }
 }
 
-int Appearance::opacity(){
+int Appearance::opacity() {
     return _opacity;
 }
 
-void Appearance::setOpacity(int opacity){
+void Appearance::setOpacity(int opacity) {
     _opacity = opacity;
 }

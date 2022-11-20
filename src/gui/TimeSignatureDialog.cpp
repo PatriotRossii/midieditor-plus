@@ -1,22 +1,22 @@
 #include "TimeSignatureDialog.h"
 
-#include <QGridLayout>
-#include <QLabel>
-#include <QIcon>
-#include <QPushButton>
 #include <QButtonGroup>
 #include <QComboBox>
-#include <QtCore/qmath.h>
+#include <QGridLayout>
+#include <QIcon>
+#include <QLabel>
 #include <QMap>
 #include <QMessageBox>
+#include <QPushButton>
+#include <QtCore/qmath.h>
 
 #include "../MidiEvent/MidiEvent.h"
 #include "../MidiEvent/TimeSignatureEvent.h"
-#include "../protocol/Protocol.h"
 #include "../midi/MidiChannel.h"
+#include "../protocol/Protocol.h"
 
-TimeSignatureDialog::TimeSignatureDialog(MidiFile *file, int measure, int measureStartTick,  QWidget *parent) : QDialog(parent)
-{
+TimeSignatureDialog::TimeSignatureDialog(MidiFile *file, int measure, int measureStartTick, QWidget *parent)
+    : QDialog(parent) {
     _measure = measure;
     _file = file;
     _startTickOfMeasure = measureStartTick;
@@ -25,14 +25,14 @@ TimeSignatureDialog::TimeSignatureDialog(MidiFile *file, int measure, int measur
     setMaximumHeight(450);
     setWindowTitle(tr("Change Meter"));
     setWindowIcon(QIcon(":/run_environment/graphics/icon.png"));
-    QGridLayout* layout = new QGridLayout(this);
+    QGridLayout *layout = new QGridLayout(this);
 
-    QLabel* icon = new QLabel();
+    QLabel *icon = new QLabel();
     icon->setPixmap(QPixmap(":/run_environment/graphics/midieditor.png").scaledToWidth(80, Qt::SmoothTransformation));
     icon->setFixedSize(80, 80);
     layout->addWidget(icon, 0, 0, 3, 1);
 
-    QLabel* title = new QLabel("<h3>Edit Time Signature</h3>", this);
+    QLabel *title = new QLabel("<h3>Edit Time Signature</h3>", this);
     layout->addWidget(title, 0, 1, 1, 2);
     title->setStyleSheet("color: black");
 
@@ -48,7 +48,7 @@ TimeSignatureDialog::TimeSignatureDialog(MidiFile *file, int measure, int measur
     // beattype
     QLabel *beatTypeLabel = new QLabel("Beat Type:");
     _beatType = new QComboBox();
-    for (int i = 0; i < 5; i++){
+    for (int i = 0; i < 5; i++) {
         _beatType->addItem(QString::number((int)qPow(2, i)));
     }
     _beatType->setCurrentIndex(2); // quarters
@@ -72,22 +72,21 @@ TimeSignatureDialog::TimeSignatureDialog(MidiFile *file, int measure, int measur
     layout->addWidget(_untilNextMeterChange, 5, 1, 1, 2);
     rangeGroup->addButton(_untilNextMeterChange);
 
-    QFrame* f = new QFrame(this);
+    QFrame *f = new QFrame(this);
     f->setFrameStyle(QFrame::HLine | QFrame::Sunken);
     layout->addWidget(f, 9, 0, 1, 3);
 
     // Accept / Break button
-    QPushButton* breakButton = new QPushButton("Cancel");
+    QPushButton *breakButton = new QPushButton("Cancel");
     connect(breakButton, SIGNAL(clicked()), this, SLOT(hide()));
-    QPushButton* acceptButton = new QPushButton("Accept");
+    QPushButton *acceptButton = new QPushButton("Accept");
     connect(acceptButton, SIGNAL(clicked()), this, SLOT(accept()));
 
     layout->addWidget(breakButton, 10, 1, 1, 1);
     layout->addWidget(acceptButton, 10, 2, 1, 1);
 }
 
-void TimeSignatureDialog::accept()
-{
+void TimeSignatureDialog::accept() {
 
     bool ok;
     int numerator = _beats->text().toInt(&ok);
@@ -96,12 +95,12 @@ void TimeSignatureDialog::accept()
         return;
     }
     int denum = _beatType->currentIndex();
-    MidiTrack* generalTrack = _file->track(0);
+    MidiTrack *generalTrack = _file->track(0);
     _file->protocol()->startNewAction("Change Time Signature");
 
-    QMap<int, MidiEvent*> *timeSignatureEvents = _file->timeSignatureEvents();
+    QMap<int, MidiEvent *> *timeSignatureEvents = _file->timeSignatureEvents();
     bool hasTimeSignatureChangesAfter = false;
-    foreach(int tick, timeSignatureEvents->keys()) {
+    foreach (int tick, timeSignatureEvents->keys()) {
         if (tick > _startTickOfMeasure) {
             hasTimeSignatureChangesAfter = true;
             break;
@@ -110,22 +109,22 @@ void TimeSignatureDialog::accept()
 
     TimeSignatureEvent *newEvent = new TimeSignatureEvent(18, numerator, denum, 24, 8, generalTrack);
     newEvent->setFile(_file);
-    QList<MidiEvent*> eventsToDelete;
+    QList<MidiEvent *> eventsToDelete;
 
-    if (_endOfPiece->isChecked() || (_untilNextMeterChange->isChecked() && !hasTimeSignatureChangesAfter)){
+    if (_endOfPiece->isChecked() || (_untilNextMeterChange->isChecked() && !hasTimeSignatureChangesAfter)) {
         // We delete all events after and insert a single new one.
-        QMap<int, MidiEvent*>::Iterator it = timeSignatureEvents->begin();
-        while(it != timeSignatureEvents->end()) {
+        QMap<int, MidiEvent *>::Iterator it = timeSignatureEvents->begin();
+        while (it != timeSignatureEvents->end()) {
             if (it.key() >= _startTickOfMeasure) {
                 eventsToDelete.append(it.value());
             }
             it++;
         }
-    } else if (_untilNextMeterChange->isChecked()){
+    } else if (_untilNextMeterChange->isChecked()) {
 
         // until next meter change and we have change events after.
         int tickFromNextChangeEvent = -1;
-        foreach(int tick, timeSignatureEvents->keys()) {
+        foreach (int tick, timeSignatureEvents->keys()) {
             if (tick > _startTickOfMeasure && (tickFromNextChangeEvent < 0 || tickFromNextChangeEvent > tick)) {
                 tickFromNextChangeEvent = tick;
             }
@@ -141,7 +140,7 @@ void TimeSignatureDialog::accept()
         }
     }
 
-    foreach (MidiEvent *eventToDelete, eventsToDelete){
+    foreach (MidiEvent *eventToDelete, eventsToDelete) {
         _file->channel(18)->removeEvent(eventToDelete);
     }
 
@@ -150,5 +149,3 @@ void TimeSignatureDialog::accept()
 
     _file->protocol()->endAction();
 }
-
-

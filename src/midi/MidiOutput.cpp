@@ -32,48 +32,44 @@
 #include "../MidiEvent/OffEvent.h"
 #include "SenderThread.h"
 
-RtMidiOut* MidiOutput::_midiOut = 0;
+RtMidiOut *MidiOutput::_midiOut = 0;
 QString MidiOutput::_outPort = "";
-SenderThread* MidiOutput::_sender = new SenderThread();
-QMap<int, QList<int> > MidiOutput::playedNotes = QMap<int, QList<int> >();
+SenderThread *MidiOutput::_sender = new SenderThread();
+QMap<int, QList<int>> MidiOutput::playedNotes = QMap<int, QList<int>>();
 bool MidiOutput::isAlternativePlayer = false;
 
 int MidiOutput::_stdChannel = 0;
 
-void MidiOutput::init()
-{
+void MidiOutput::init() {
 
     // RtMidiOut constructor
     try {
         _midiOut = new RtMidiOut(RtMidi::UNSPECIFIED, QString("MidiEditor output").toStdString());
-    } catch (RtMidiError& error) {
+    } catch (RtMidiError &error) {
         error.printMessage();
     }
     _sender->start(QThread::TimeCriticalPriority);
 }
 
-void MidiOutput::sendCommand(QByteArray array)
-{
-
+void MidiOutput::sendCommand(QByteArray array) {
     sendEnqueuedCommand(array);
 }
 
-void MidiOutput::sendCommand(MidiEvent* e)
-{
+void MidiOutput::sendCommand(MidiEvent *e) {
 
     if (e->channel() >= 0 && e->channel() < 16 || e->line() == MidiEvent::SYSEX_LINE) {
         _sender->enqueue(e);
 
         if (isAlternativePlayer) {
-            NoteOnEvent* n = dynamic_cast<NoteOnEvent*>(e);
+            NoteOnEvent *n = dynamic_cast<NoteOnEvent *>(e);
             if (n && n->velocity() > 0) {
                 playedNotes[n->channel()].append(n->note());
             } else if (n && n->velocity() == 0) {
                 playedNotes[n->channel()].removeOne(n->note());
             } else {
-                OffEvent* o = dynamic_cast<OffEvent*>(e);
+                OffEvent *o = dynamic_cast<OffEvent *>(e);
                 if (o) {
-                    n = dynamic_cast<NoteOnEvent*>(o->onEvent());
+                    n = dynamic_cast<NoteOnEvent *>(o->onEvent());
                     if (n) {
                         playedNotes[n->channel()].removeOne(n->note());
                     }
@@ -83,8 +79,7 @@ void MidiOutput::sendCommand(MidiEvent* e)
     }
 }
 
-QStringList MidiOutput::outputPorts()
-{
+QStringList MidiOutput::outputPorts() {
 
     QStringList ports;
 
@@ -95,15 +90,14 @@ QStringList MidiOutput::outputPorts()
 
         try {
             ports.append(QString::fromStdString(_midiOut->getPortName(i)));
-        } catch (RtMidiError&) {
+        } catch (RtMidiError &) {
         }
     }
 
     return ports;
 }
 
-bool MidiOutput::setOutputPort(QString name)
-{
+bool MidiOutput::setOutputPort(QString name) {
 
     // try to find the port
     unsigned int nPorts = _midiOut->getPortCount();
@@ -122,7 +116,7 @@ bool MidiOutput::setOutputPort(QString name)
                 return true;
             }
 
-        } catch (RtMidiError&) {
+        } catch (RtMidiError &) {
         }
     }
 
@@ -130,13 +124,11 @@ bool MidiOutput::setOutputPort(QString name)
     return false;
 }
 
-QString MidiOutput::outputPort()
-{
+QString MidiOutput::outputPort() {
     return _outPort;
 }
 
-void MidiOutput::sendEnqueuedCommand(QByteArray array)
-{
+void MidiOutput::sendEnqueuedCommand(QByteArray array) {
 
     if (_outPort != "") {
 
@@ -148,31 +140,27 @@ void MidiOutput::sendEnqueuedCommand(QByteArray array)
         }
         try {
             _midiOut->sendMessage(&message);
-        } catch (RtMidiError& error) {
+        } catch (RtMidiError &error) {
             error.printMessage();
         }
     }
 }
 
-void MidiOutput::setStandardChannel(int channel)
-{
+void MidiOutput::setStandardChannel(int channel) {
     _stdChannel = channel;
 }
 
-int MidiOutput::standardChannel()
-{
+int MidiOutput::standardChannel() {
     return _stdChannel;
 }
 
-void MidiOutput::sendProgram(int channel, int prog)
-{
+void MidiOutput::sendProgram(int channel, int prog) {
     QByteArray array = QByteArray();
     array.append(0xC0 | channel);
     array.append(prog);
     sendCommand(array);
 }
 
-bool MidiOutput::isConnected()
-{
+bool MidiOutput::isConnected() {
     return _outPort != "";
 }
