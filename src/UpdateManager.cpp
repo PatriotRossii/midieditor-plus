@@ -14,12 +14,10 @@
 #define MIDIEDITOR_RELEASE_VERSION_STRING_EVAL STR_VALUE(MIDIEDITOR_RELEASE_VERSION_STRING_DEF)
 #define MIDIEDITOR_RELEASE_DATE_EVAL STR_VALUE(MIDIEDITOR_RELEASE_DATE_DEF)
 
-UpdateManager* UpdateManager::_instance = NULL;
+UpdateManager *UpdateManager::_instance = NULL;
 bool UpdateManager::_autoMode = false;
 
-UpdateManager::UpdateManager()
-    : QObject()
-{
+UpdateManager::UpdateManager() : QObject() {
     _updateID = MIDIEDITOR_RELEASE_VERSION_ID_DEF;
 #ifdef __WINDOWS_MM__
     _system = "win32";
@@ -31,40 +29,43 @@ UpdateManager::UpdateManager()
 #endif
 #endif
 
-  _versionString = MIDIEDITOR_RELEASE_VERSION_STRING_EVAL;
-  _date = MIDIEDITOR_RELEASE_DATE_EVAL;
-    connect(&_webCtrl, SIGNAL(finished(QNetworkReply*)), this,
-        SLOT(fileDownloaded(QNetworkReply*)));
+    _versionString = MIDIEDITOR_RELEASE_VERSION_STRING_EVAL;
+    _date = MIDIEDITOR_RELEASE_DATE_EVAL;
+    connect(&_webCtrl, SIGNAL(finished(QNetworkReply *)), this, SLOT(fileDownloaded(QNetworkReply *)));
 }
 
-void UpdateManager::init()
-{
+void UpdateManager::init() {
     _mirrors.append("https://midieditor.org/update");
 }
 
-QString UpdateManager::versionString() { return _versionString; }
+QString UpdateManager::versionString() {
+    return _versionString;
+}
 
-QString UpdateManager::date() { return _date; }
+QString UpdateManager::date() {
+    return _date;
+}
 
-UpdateManager* UpdateManager::instance()
-{
+UpdateManager *UpdateManager::instance() {
     if (_instance == NULL)
         _instance = new UpdateManager();
     return _instance;
 }
 
-void UpdateManager::checkForUpdates()
-{
+void UpdateManager::checkForUpdates() {
     listIndex = 0;
     tryNextMirror();
 }
 
-bool UpdateManager::autoCheckForUpdates() { return _autoMode; }
+bool UpdateManager::autoCheckForUpdates() {
+    return _autoMode;
+}
 
-void UpdateManager::setAutoCheckUpdatesEnabled(bool b) { _autoMode = b; }
+void UpdateManager::setAutoCheckUpdatesEnabled(bool b) {
+    _autoMode = b;
+}
 
-void UpdateManager::tryNextMirror()
-{
+void UpdateManager::tryNextMirror() {
 
     if (listIndex >= _mirrors.size()) {
         return;
@@ -78,8 +79,7 @@ void UpdateManager::tryNextMirror()
     _webCtrl.get(request);
 }
 
-void UpdateManager::fileDownloaded(QNetworkReply* reply)
-{
+void UpdateManager::fileDownloaded(QNetworkReply *reply) {
     if (reply->error() != QNetworkReply::NoError) {
         // QUrl possibleRedirectUrl =
         // reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
@@ -126,7 +126,7 @@ void UpdateManager::fileDownloaded(QNetworkReply* reply)
                 QString path = element.attribute("download_path");
                 QString changelog = element.firstChildElement("changelog").text();
                 QString newVersionString = element.attribute("latest_version_string");
-                Update* update = new Update();
+                Update *update = new Update();
                 update->setVersionID(newUpdate);
                 update->setChangelog(changelog);
                 update->setDownloadPath(path);

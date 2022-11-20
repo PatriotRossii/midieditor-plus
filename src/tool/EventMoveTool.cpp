@@ -27,9 +27,7 @@
 #include "Selection.h"
 #include "StandardTool.h"
 
-EventMoveTool::EventMoveTool(bool upDown, bool leftRight)
-    : EventTool()
-{
+EventMoveTool::EventMoveTool(bool upDown, bool leftRight) : EventTool() {
     moveUpDown = upDown;
     moveLeftRight = leftRight;
     inDrag = false;
@@ -47,9 +45,7 @@ EventMoveTool::EventMoveTool(bool upDown, bool leftRight)
     }
 }
 
-EventMoveTool::EventMoveTool(EventMoveTool& other)
-    : EventTool(other)
-{
+EventMoveTool::EventMoveTool(EventMoveTool &other) : EventTool(other) {
     moveUpDown = other.moveUpDown;
     moveLeftRight = other.moveLeftRight;
     inDrag = false;
@@ -57,15 +53,13 @@ EventMoveTool::EventMoveTool(EventMoveTool& other)
     startY = 0;
 }
 
-ProtocolEntry* EventMoveTool::copy()
-{
+ProtocolEntry *EventMoveTool::copy() {
     return new EventMoveTool(*this);
 }
 
-void EventMoveTool::reloadState(ProtocolEntry* entry)
-{
+void EventMoveTool::reloadState(ProtocolEntry *entry) {
     EventTool::reloadState(entry);
-    EventMoveTool* other = dynamic_cast<EventMoveTool*>(entry);
+    EventMoveTool *other = dynamic_cast<EventMoveTool *>(entry);
     if (!other) {
         return;
     }
@@ -77,8 +71,7 @@ void EventMoveTool::reloadState(ProtocolEntry* entry)
     startY = 0;
 }
 
-void EventMoveTool::draw(QPainter* painter)
-{
+void EventMoveTool::draw(QPainter *painter) {
     paintSelectedEvents(painter);
     int currentX = computeRaster();
 
@@ -98,7 +91,7 @@ void EventMoveTool::draw(QPainter* painter)
         } else {
             shiftY = nLines * lineHeight;
         }
-        foreach (MidiEvent* event, Selection::instance()->selectedEvents()) {
+        foreach (MidiEvent *event, Selection::instance()->selectedEvents()) {
             int customShiftY = shiftY;
             if (event->line() > 127) {
                 customShiftY = 0;
@@ -106,21 +99,19 @@ void EventMoveTool::draw(QPainter* painter)
             if (event->shown()) {
                 painter->setPen(Qt::lightGray);
                 painter->setBrush(Qt::darkBlue);
-                painter->drawRoundedRect(event->x() - shiftX, event->y() - customShiftY,
-                    event->width(), event->height(), 1, 1);
+                painter->drawRoundedRect(event->x() - shiftX, event->y() - customShiftY, event->width(),
+                                         event->height(), 1, 1);
                 painter->setPen(Qt::gray);
-                painter->drawLine(event->x() - shiftX, 0, event->x() - shiftX,
-                    matrixWidget->height());
-                painter->drawLine(event->x() + event->width() - shiftX, 0,
-                    event->x() + event->width() - shiftX, matrixWidget->height());
+                painter->drawLine(event->x() - shiftX, 0, event->x() - shiftX, matrixWidget->height());
+                painter->drawLine(event->x() + event->width() - shiftX, 0, event->x() + event->width() - shiftX,
+                                  matrixWidget->height());
                 painter->setPen(Qt::black);
             }
         }
     }
 }
 
-bool EventMoveTool::press(bool leftClick)
-{
+bool EventMoveTool::press(bool leftClick) {
     Q_UNUSED(leftClick);
     inDrag = true;
     startX = mouseX;
@@ -137,8 +128,7 @@ bool EventMoveTool::press(bool leftClick)
     return true;
 }
 
-bool EventMoveTool::release()
-{
+bool EventMoveTool::release() {
     inDrag = false;
     matrixWidget->setCursor(Qt::ArrowCursor);
     int currentX = computeRaster();
@@ -155,7 +145,8 @@ bool EventMoveTool::release()
 
     // return when there shiftX/shiftY is too small or there are no selected
     // events
-    if (Selection::instance()->selectedEvents().count() == 0 || (-2 <= shiftX && shiftX <= 2 && -2 <= shiftY && shiftY <= 2)) {
+    if (Selection::instance()->selectedEvents().count() == 0 ||
+        (-2 <= shiftX && shiftX <= 2 && -2 <= shiftY && shiftY <= 2)) {
         if (_standardTool) {
             Tool::setCurrentTool(_standardTool);
             _standardTool->move(mouseX, mouseY);
@@ -168,9 +159,9 @@ bool EventMoveTool::release()
 
     // backwards to hold stability
     for (int i = Selection::instance()->selectedEvents().count() - 1; i >= 0; i--) {
-        MidiEvent* event = Selection::instance()->selectedEvents().at(i);
-        NoteOnEvent* ev = dynamic_cast<NoteOnEvent*>(event);
-        OffEvent* off = dynamic_cast<OffEvent*>(event);
+        MidiEvent *event = Selection::instance()->selectedEvents().at(i);
+        NoteOnEvent *ev = dynamic_cast<NoteOnEvent *>(event);
+        OffEvent *off = dynamic_cast<OffEvent *>(event);
         if (ev) {
             int note = ev->note() + numLines;
             if (note < 0) {
@@ -198,14 +189,12 @@ bool EventMoveTool::release()
     return true;
 }
 
-bool EventMoveTool::move(int mouseX, int mouseY)
-{
+bool EventMoveTool::move(int mouseX, int mouseY) {
     EventTool::move(mouseX, mouseY);
     return inDrag;
 }
 
-bool EventMoveTool::releaseOnly()
-{
+bool EventMoveTool::releaseOnly() {
     inDrag = false;
     matrixWidget->setCursor(Qt::ArrowCursor);
     startX = 0;
@@ -213,19 +202,16 @@ bool EventMoveTool::releaseOnly()
     return true;
 }
 
-void EventMoveTool::setDirections(bool upDown, bool leftRight)
-{
+void EventMoveTool::setDirections(bool upDown, bool leftRight) {
     moveUpDown = upDown;
     moveLeftRight = leftRight;
 }
 
-bool EventMoveTool::showsSelection()
-{
+bool EventMoveTool::showsSelection() {
     return true;
 }
 
-int EventMoveTool::computeRaster()
-{
+int EventMoveTool::computeRaster() {
 
     if (!moveLeftRight) {
         return mouseX;
@@ -235,13 +221,13 @@ int EventMoveTool::computeRaster()
     int firstTick = -1;
     int lastTick = -1;
 
-    foreach (MidiEvent* event, Selection::instance()->selectedEvents()) {
+    foreach (MidiEvent *event, Selection::instance()->selectedEvents()) {
 
         if ((firstTick == -1) || (event->midiTime() < firstTick)) {
             firstTick = event->midiTime();
         }
 
-        NoteOnEvent* onEvent = dynamic_cast<NoteOnEvent*>(event);
+        NoteOnEvent *onEvent = dynamic_cast<NoteOnEvent *>(event);
         if (onEvent) {
             if ((lastTick == -1) || (onEvent->offEvent()->midiTime() > lastTick)) {
                 lastTick = onEvent->offEvent()->midiTime();
@@ -250,8 +236,10 @@ int EventMoveTool::computeRaster()
     }
 
     // compute x positions and compute raster
-    bool useLast = (lastTick >= 0) && lastTick <= matrixWidget->maxVisibleMidiTime() && lastTick >= matrixWidget->minVisibleMidiTime();
-    bool useFirst = (firstTick >= 0) && firstTick <= matrixWidget->maxVisibleMidiTime() && firstTick >= matrixWidget->minVisibleMidiTime();
+    bool useLast = (lastTick >= 0) && lastTick <= matrixWidget->maxVisibleMidiTime() &&
+                   lastTick >= matrixWidget->minVisibleMidiTime();
+    bool useFirst = (firstTick >= 0) && firstTick <= matrixWidget->maxVisibleMidiTime() &&
+                    firstTick >= matrixWidget->minVisibleMidiTime();
 
     if (!useFirst && !useLast) {
         return mouseX;

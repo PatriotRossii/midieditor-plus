@@ -1,11 +1,10 @@
 #include "Selection.h"
 #include "../gui/EventWidget.h"
 
-Selection* Selection::_selectionInstance = new Selection(0);
-EventWidget* Selection::_eventWidget = 0;
+Selection *Selection::_selectionInstance = new Selection(0);
+EventWidget *Selection::_eventWidget = 0;
 
-Selection::Selection(MidiFile* file)
-{
+Selection::Selection(MidiFile *file) {
     _file = file;
     if (_eventWidget) {
         _eventWidget->setEvents(_selectedEvents);
@@ -13,20 +12,17 @@ Selection::Selection(MidiFile* file)
     }
 }
 
-Selection::Selection(Selection& other)
-{
+Selection::Selection(Selection &other) {
     _file = other._file;
     _selectedEvents = other._selectedEvents;
 }
 
-ProtocolEntry* Selection::copy()
-{
+ProtocolEntry *Selection::copy() {
     return new Selection(*this);
 }
 
-void Selection::reloadState(ProtocolEntry* entry)
-{
-    Selection* other = dynamic_cast<Selection*>(entry);
+void Selection::reloadState(ProtocolEntry *entry) {
+    Selection *other = dynamic_cast<Selection *>(entry);
     if (!other) {
         return;
     }
@@ -37,31 +33,26 @@ void Selection::reloadState(ProtocolEntry* entry)
     }
 }
 
-MidiFile* Selection::file()
-{
+MidiFile *Selection::file() {
     return _file;
 }
 
-Selection* Selection::instance()
-{
+Selection *Selection::instance() {
     return _selectionInstance;
 }
 
-void Selection::setFile(MidiFile* file)
-{
+void Selection::setFile(MidiFile *file) {
 
     // create new selection
     _selectionInstance = new Selection(file);
 }
 
-QList<MidiEvent*> Selection::selectedEvents()
-{
+QList<MidiEvent *> Selection::selectedEvents() {
     return _selectedEvents;
 }
 
-void Selection::setSelection(QList<MidiEvent*> selections)
-{
-    ProtocolEntry* toCopy = copy();
+void Selection::setSelection(QList<MidiEvent *> selections) {
+    ProtocolEntry *toCopy = copy();
     _selectedEvents = selections;
     protocol(toCopy, this);
     if (_eventWidget) {
@@ -70,9 +61,8 @@ void Selection::setSelection(QList<MidiEvent*> selections)
     }
 }
 
-void Selection::clearSelection()
-{
-    setSelection(QList<MidiEvent*>());
+void Selection::clearSelection() {
+    setSelection(QList<MidiEvent *>());
     if (_eventWidget) {
         _eventWidget->setEvents(_selectedEvents);
         //_eventWidget->reload();
