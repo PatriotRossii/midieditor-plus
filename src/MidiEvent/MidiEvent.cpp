@@ -302,13 +302,14 @@ MidiEvent* MidiEvent::loadMidiEvent(QDataStream* content, bool* ok,
                     textEvent->setType(tempByte);
                     int length = MidiFile::variableLengthvalue(content);
                     // use wchar_t because some files use Unicode.
-                    wchar_t str[128] = L"";
+                    std::wstring str;
+                    str.reserve(length);
                     for (int i = 0; i < length; i++) {
                         (*content) >> tempByte;
                         wchar_t temp[2] = { btowc(tempByte) };
-                        wcsncat(str, temp, 1);
+                        str.push_back(temp[0]);
                     }
-                    textEvent->setText(QString::fromWCharArray(str));
+                    textEvent->setText(QString::fromWCharArray(str.data()));
                     *ok = true;
                     return textEvent;
 
