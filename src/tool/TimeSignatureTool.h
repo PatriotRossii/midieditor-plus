@@ -5,11 +5,11 @@
 
 class TimeSignatureTool : public EventTool {
 
-public:
+  public:
     TimeSignatureTool();
-    TimeSignatureTool(TimeSignatureTool& other);
+    TimeSignatureTool(TimeSignatureTool &other);
 
-    void draw(QPainter* painter);
+    void draw(QPainter *painter);
 
     bool press(bool leftClick);
     bool release();
@@ -17,10 +17,10 @@ public:
 
     bool move(int mouseX, int mouseY);
 
-    ProtocolEntry* copy();
-    void reloadState(ProtocolEntry* entry);
+    ProtocolEntry *copy();
+    void reloadState(ProtocolEntry *entry);
 
-private:
+  private:
 };
 
 #endif // TIMESIGNATURETOOL_H

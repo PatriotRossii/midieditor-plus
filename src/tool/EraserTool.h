@@ -23,14 +23,14 @@
 
 class EraserTool : public EventTool {
 
-public:
+  public:
     EraserTool();
-    EraserTool(EraserTool& other);
+    EraserTool(EraserTool &other);
 
-    ProtocolEntry* copy();
-    void reloadState(ProtocolEntry* entry);
+    ProtocolEntry *copy();
+    void reloadState(ProtocolEntry *entry);
     bool move(int mouseX, int mouseY);
-    void draw(QPainter* painter);
+    void draw(QPainter *painter);
     bool release();
 };
 

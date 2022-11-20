@@ -34,21 +34,20 @@ class MidiTrack;
 
 class MidiInput : public QObject {
 
-public:
+  public:
     static void init();
 
     static void sendCommand(QByteArray array);
-    static void sendCommand(MidiEvent* e);
+    static void sendCommand(MidiEvent *e);
 
     static QStringList inputPorts();
     static bool setInputPort(QString name);
     static QString inputPort();
 
     static void startInput();
-    static QMultiMap<int, MidiEvent*> endInput(MidiTrack* track);
+    static QMultiMap<int, MidiEvent *> endInput(MidiTrack *track);
 
-    static void receiveMessage(double deltatime,
-        std::vector<unsigned char>* message, void* userData = 0);
+    static void receiveMessage(double deltatime, std::vector<unsigned char> *message, void *userData = 0);
 
     static void setTime(int ms);
 
@@ -58,10 +57,10 @@ public:
 
     static bool isConnected();
 
-private:
+  private:
     static QString _inPort;
-    static RtMidiIn* _midiIn;
-    static QMultiMap<int, std::vector<unsigned char> >* _messages;
+    static RtMidiIn *_midiIn;
+    static QMultiMap<int, std::vector<unsigned char>> *_messages;
     static int _currentTime;
     static bool _recording;
     static QList<int> toUnique(QList<int> in);

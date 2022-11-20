@@ -23,14 +23,14 @@
 
 class SizeChangeTool : public EventTool {
 
-public:
+  public:
     SizeChangeTool();
-    SizeChangeTool(SizeChangeTool& other);
+    SizeChangeTool(SizeChangeTool &other);
 
-    ProtocolEntry* copy();
-    void reloadState(ProtocolEntry* entry);
+    ProtocolEntry *copy();
+    void reloadState(ProtocolEntry *entry);
 
-    void draw(QPainter* painter);
+    void draw(QPainter *painter);
     bool press(bool leftClick);
     bool release();
     bool move(int mouseX, int mouseY);
@@ -38,7 +38,7 @@ public:
 
     bool showsSelection();
 
-private:
+  private:
     bool inDrag, dragsOnEvent;
     int xPos;
 };

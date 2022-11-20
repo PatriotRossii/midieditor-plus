@@ -3,3 +3,4 @@ IndentWidth: 4
 ColumnLimit: 120
 PackConstructorInitializers: NextLine
 AllowShortFunctionsOnASingleLine: Empty
+SortIncludes: Never

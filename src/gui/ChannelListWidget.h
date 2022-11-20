@@ -37,25 +37,25 @@ class ChannelListItem : public QWidget {
 
     Q_OBJECT
 
-public:
-    ChannelListItem(int channel, ChannelListWidget* parent);
+  public:
+    ChannelListItem(int channel, ChannelListWidget *parent);
     void onBeforeUpdate();
 
-signals:
+  signals:
     void selectInstrumentClicked(int channel);
     void channelStateChanged();
 
-public slots:
+  public slots:
     void toggleVisibility(bool visible);
     void toggleAudibility(bool audible);
     void toggleSolo(bool solo);
     void instrument();
 
-private:
-    QLabel* instrumentLabel;
-    ChannelListWidget* channelList;
+  private:
+    QLabel *instrumentLabel;
+    ChannelListWidget *channelList;
     int channel;
-    ColoredWidget* colored;
+    ColoredWidget *colored;
     QAction *visibleAction, *loudAction, *soloAction;
 };
 
@@ -63,21 +63,21 @@ class ChannelListWidget : public QListWidget {
 
     Q_OBJECT
 
-public:
-    ChannelListWidget(QWidget* parent = 0);
-    void setFile(MidiFile* f);
-    MidiFile* midiFile();
+  public:
+    ChannelListWidget(QWidget *parent = 0);
+    void setFile(MidiFile *f);
+    MidiFile *midiFile();
 
-signals:
+  signals:
     void channelStateChanged();
     void selectInstrumentClicked(int channel);
 
-public slots:
+  public slots:
     void update();
 
-private:
-    MidiFile* file;
-    QList<ChannelListItem*> items;
+  private:
+    MidiFile *file;
+    QList<ChannelListItem *> items;
 };
 
 #endif

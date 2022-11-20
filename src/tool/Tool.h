@@ -53,138 +53,138 @@ class StandardTool;
 
 class Tool : public ProtocolEntry {
 
-public:
+  public:
     /**
-		 * \brief creates a new Tool.
-		 */
+     * \brief creates a new Tool.
+     */
     Tool();
 
     /**
-		 * \brief creates a new Tool copying all data from &other.
-		 */
-    Tool(Tool& other);
+     * \brief creates a new Tool copying all data from &other.
+     */
+    Tool(Tool &other);
 
     /**
-		 * \brief returns wether the Tool is selected or not.
-		 */
+     * \brief returns wether the Tool is selected or not.
+     */
     virtual bool selected();
 
     /**
-		 * \brief sets the Tools image.
-		 */
+     * \brief sets the Tools image.
+     */
     void setImage(QString name);
 
     /**
-		 * \brief returns the Tools image.
-		 */
-    QImage* image();
+     * \brief returns the Tools image.
+     */
+    QImage *image();
 
     /**
-		 * \brief sets the Tools ToolTipText
-		 */
+     * \brief sets the Tools ToolTipText
+     */
     void setToolTipText(QString text);
 
     /**
-		 * \brief returns the Tools imagetext.
-		 */
+     * \brief returns the Tools imagetext.
+     */
     QString toolTip();
 
     /**
-		 * \brief sets the Tools ToolButton.
-		 */
-    void setButton(ToolButton* b);
+     * \brief sets the Tools ToolButton.
+     */
+    void setButton(ToolButton *b);
 
     /**
-		 * \brief this method is called when the user presses the Tools Button.
-		 */
+     * \brief this method is called when the user presses the Tools Button.
+     */
     virtual void buttonClick();
 
     /**
-		 * \brief returns the Tools ToolButton.
-		 */
-    ToolButton* button();
+     * \brief returns the Tools ToolButton.
+     */
+    ToolButton *button();
 
     /**
-		 * \brief sets the static current Tool.
-		 *
-		 * This method is used by EditorTool
-		 */
-    static void setCurrentTool(EditorTool* editorTool);
+     * \brief sets the static current Tool.
+     *
+     * This method is used by EditorTool
+     */
+    static void setCurrentTool(EditorTool *editorTool);
 
     /**
-		 * \brief returns the current Tool.
-		 */
-    static EditorTool* currentTool();
+     * \brief returns the current Tool.
+     */
+    static EditorTool *currentTool();
 
     /**
-		 * \brief sets the static current MidiFile.
-		 */
-    static void setFile(MidiFile* file);
+     * \brief sets the static current MidiFile.
+     */
+    static void setFile(MidiFile *file);
 
     /**
-		 * \brief returns the currenty opened File.
-		 */
-    static MidiFile* currentFile();
+     * \brief returns the currenty opened File.
+     */
+    static MidiFile *currentFile();
 
     /**
-		 * \brief returns the Protocol of the currently opened Document.
-		 */
-    static Protocol* currentProtocol();
+     * \brief returns the Protocol of the currently opened Document.
+     */
+    static Protocol *currentProtocol();
 
     /**
-		 * \brief sets the StandardTool. When the StandardTool is set, the Tool
-		 * has to set StandardTool as currentTool when its action is finished
-		 */
-    void setStandardTool(StandardTool* stdTool);
+     * \brief sets the StandardTool. When the StandardTool is set, the Tool
+     * has to set StandardTool as currentTool when its action is finished
+     */
+    void setStandardTool(StandardTool *stdTool);
 
     /*
-		 * The following functions are redefinitions from the superclass
-		 * ProtocolEntry
-		 */
-    virtual ProtocolEntry* copy();
+     * The following functions are redefinitions from the superclass
+     * ProtocolEntry
+     */
+    virtual ProtocolEntry *copy();
 
-    virtual void reloadState(ProtocolEntry* entry);
+    virtual void reloadState(ProtocolEntry *entry);
 
-    MidiFile* file();
+    MidiFile *file();
 
-protected:
+  protected:
     /**
-		 * \brief the Tools Button if existing.
-		 */
-    ToolButton* _button;
-
-    /**
-		 * \brief the image representing the Tool.
-		 *
-		 * Used in the protoc list and on the Buttons.
-		 */
-    QImage* _image;
+     * \brief the Tools Button if existing.
+     */
+    ToolButton *_button;
 
     /**
-		 * \brief The ToolTip the Button should display.
-		 */
+     * \brief the image representing the Tool.
+     *
+     * Used in the protoc list and on the Buttons.
+     */
+    QImage *_image;
+
+    /**
+     * \brief The ToolTip the Button should display.
+     */
     QString _toolTip;
 
     /**
-		 * \brief the StandardTool.
-		 *
-		 * If existing the Tool has to set _standardTool as current tool
-		 * after his action has been finished.
-		 */
-    StandardTool* _standardTool;
+     * \brief the StandardTool.
+     *
+     * If existing the Tool has to set _standardTool as current tool
+     * after his action has been finished.
+     */
+    StandardTool *_standardTool;
 
     /**
-		 * \brief the current opened file.
-		 */
-    static MidiFile* _currentFile;
+     * \brief the current opened file.
+     */
+    static MidiFile *_currentFile;
 
     /**
-		 * \brief The active EditorTool.
-		 *
-		 * Is not always the selected Tool (If the selected tool is the
-		 * StandardTool).
-		 */
-    static EditorTool* _currentTool;
+     * \brief The active EditorTool.
+     *
+     * Is not always the selected Tool (If the selected tool is the
+     * StandardTool).
+     */
+    static EditorTool *_currentTool;
 };
 
 #endif

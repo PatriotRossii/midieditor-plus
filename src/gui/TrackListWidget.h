@@ -37,25 +37,25 @@ class TrackListItem : public QWidget {
 
     Q_OBJECT
 
-public:
-    TrackListItem(MidiTrack* track, TrackListWidget* parent);
+  public:
+    TrackListItem(MidiTrack *track, TrackListWidget *parent);
     void onBeforeUpdate();
 
-signals:
+  signals:
     void trackRenameClicked(int tracknumber);
     void trackRemoveClicked(int tracknumber);
 
-public slots:
+  public slots:
     void toggleVisibility(bool visible);
     void toggleAudibility(bool audible);
     void removeTrack();
     void renameTrack();
 
-private:
-    QLabel* trackNameLabel;
-    TrackListWidget* trackList;
-    MidiTrack* track;
-    ColoredWidget* colored;
+  private:
+    QLabel *trackNameLabel;
+    TrackListWidget *trackList;
+    MidiTrack *track;
+    ColoredWidget *colored;
     QAction *visibleAction, *loudAction;
 };
 
@@ -63,24 +63,24 @@ class TrackListWidget : public QListWidget {
 
     Q_OBJECT
 
-public:
-    TrackListWidget(QWidget* parent = 0);
-    void setFile(MidiFile* f);
-    MidiFile* midiFile();
+  public:
+    TrackListWidget(QWidget *parent = 0);
+    void setFile(MidiFile *f);
+    MidiFile *midiFile();
 
-signals:
+  signals:
     void trackRenameClicked(int tracknumber);
     void trackRemoveClicked(int tracknumber);
-    void trackClicked(MidiTrack* track);
+    void trackClicked(MidiTrack *track);
 
-public slots:
+  public slots:
     void update();
-    void chooseTrack(QListWidgetItem* item);
+    void chooseTrack(QListWidgetItem *item);
 
-private:
-    MidiFile* file;
-    QMap<MidiTrack*, TrackListItem*> items;
-    QList<MidiTrack*> trackorder;
+  private:
+    MidiFile *file;
+    QMap<MidiTrack *, TrackListItem *> items;
+    QList<MidiTrack *> trackorder;
 };
 
 #endif

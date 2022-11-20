@@ -1,7 +1,6 @@
 #ifndef TIMESIGNATUREDIALOG_H
 #define TIMESIGNATUREDIALOG_H
 
-
 #include <QDialog>
 #include <QRadioButton>
 #include <QSpinBox>
@@ -13,13 +12,13 @@ class TimeSignatureDialog : public QDialog {
 
     Q_OBJECT
 
-public:
-    TimeSignatureDialog(MidiFile *file, int measure, int startTickOfMeasure, QWidget* parent = 0);
+  public:
+    TimeSignatureDialog(MidiFile *file, int measure, int startTickOfMeasure, QWidget *parent = 0);
 
-public slots:
+  public slots:
     void accept();
 
-private:
+  private:
     QSpinBox *_beats;
     QComboBox *_beatType;
     QRadioButton *_untilNextMeterChange, *_endOfPiece;

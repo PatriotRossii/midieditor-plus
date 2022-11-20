@@ -24,7 +24,7 @@
 
 class GraphicObject {
 
-public:
+  public:
     GraphicObject();
 
     int x();
@@ -37,12 +37,12 @@ public:
     void setWidth(int w);
     void setHeight(int h);
 
-    virtual void draw(QPainter* p, QColor c);
+    virtual void draw(QPainter *p, QColor c);
 
     bool shown();
     void setShown(bool b);
 
-private:
+  private:
     int _x, _y, _width, _height;
     bool shownInWidget;
 };

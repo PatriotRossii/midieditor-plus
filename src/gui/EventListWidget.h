@@ -20,7 +20,7 @@
 #define EVENTLISTWIDGET_H_
 
 class EventListWidget {
-public:
+  public:
     EventListWidget();
     virtual ~EventListWidget();
 };

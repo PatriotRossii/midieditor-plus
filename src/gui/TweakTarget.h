@@ -22,8 +22,8 @@
 class MainWindow;
 
 class TweakTarget {
-public:
-    virtual ~TweakTarget() {};
+  public:
+    virtual ~TweakTarget(){};
     virtual void smallDecrease() = 0;
     virtual void smallIncrease() = 0;
     virtual void mediumDecrease() = 0;
@@ -33,8 +33,8 @@ public:
 };
 
 class TimeTweakTarget : public TweakTarget {
-public:
-    TimeTweakTarget(MainWindow* mainWindow);
+  public:
+    TimeTweakTarget(MainWindow *mainWindow);
     void smallDecrease();
     void smallIncrease();
     void mediumDecrease();
@@ -42,14 +42,14 @@ public:
     void largeDecrease();
     void largeIncrease();
 
-protected:
-    MainWindow* mainWindow;
+  protected:
+    MainWindow *mainWindow;
     void offset(int amount);
 };
 
 class StartTimeTweakTarget : public TweakTarget {
-public:
-    StartTimeTweakTarget(MainWindow* mainWindow);
+  public:
+    StartTimeTweakTarget(MainWindow *mainWindow);
     void smallDecrease();
     void smallIncrease();
     void mediumDecrease();
@@ -57,14 +57,14 @@ public:
     void largeDecrease();
     void largeIncrease();
 
-protected:
-    MainWindow* mainWindow;
+  protected:
+    MainWindow *mainWindow;
     void offset(int amount);
 };
 
 class EndTimeTweakTarget : public TweakTarget {
-public:
-    EndTimeTweakTarget(MainWindow* mainWindow);
+  public:
+    EndTimeTweakTarget(MainWindow *mainWindow);
     void smallDecrease();
     void smallIncrease();
     void mediumDecrease();
@@ -72,14 +72,14 @@ public:
     void largeDecrease();
     void largeIncrease();
 
-protected:
-    MainWindow* mainWindow;
+  protected:
+    MainWindow *mainWindow;
     void offset(int amount);
 };
 
 class NoteTweakTarget : public TweakTarget {
-public:
-    NoteTweakTarget(MainWindow* mainWindow);
+  public:
+    NoteTweakTarget(MainWindow *mainWindow);
     void smallDecrease();
     void smallIncrease();
     void mediumDecrease();
@@ -87,14 +87,14 @@ public:
     void largeDecrease();
     void largeIncrease();
 
-protected:
-    MainWindow* mainWindow;
+  protected:
+    MainWindow *mainWindow;
     void offset(int amount);
 };
 
 class ValueTweakTarget : public TweakTarget {
-public:
-    ValueTweakTarget(MainWindow* mainWindow);
+  public:
+    ValueTweakTarget(MainWindow *mainWindow);
     void smallDecrease();
     void smallIncrease();
     void mediumDecrease();
@@ -102,8 +102,8 @@ public:
     void largeDecrease();
     void largeIncrease();
 
-protected:
-    MainWindow* mainWindow;
+  protected:
+    MainWindow *mainWindow;
     void offset(int amount, int pitchBendAmount, int tempoAmount);
 };
 

@@ -23,15 +23,15 @@
 
 class TempoChangeEvent : public MidiEvent {
 
-public:
-    TempoChangeEvent(int channel, int value, MidiTrack* track);
-    TempoChangeEvent(TempoChangeEvent& other);
+  public:
+    TempoChangeEvent(int channel, int value, MidiTrack *track);
+    TempoChangeEvent(TempoChangeEvent &other);
 
     int beatsPerQuarter();
     double msPerTick();
 
-    virtual ProtocolEntry* copy();
-    virtual void reloadState(ProtocolEntry* entry);
+    virtual ProtocolEntry *copy();
+    virtual void reloadState(ProtocolEntry *entry);
     int line();
     QByteArray save();
 
@@ -39,7 +39,7 @@ public:
 
     void setBeats(int beats);
 
-private:
+  private:
     int _beats;
 };
 

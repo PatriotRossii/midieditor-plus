@@ -32,18 +32,18 @@ class PlayerThread : public QThread {
 
     Q_OBJECT
 
-public:
+  public:
     PlayerThread();
-    void setFile(MidiFile* f);
+    void setFile(MidiFile *f);
     void stop();
     void run();
     void setInterval(int i);
     int timeMs();
 
-public slots:
+  public slots:
     void timeout();
 
-signals:
+  signals:
     void timeMsChanged(int ms);
     void playerStopped();
     void playerStarted();
@@ -54,13 +54,13 @@ signals:
 
     void measureUpdate(int measure, int tickInMeasure);
 
-private:
-    MidiFile* file;
-    QMultiMap<int, MidiEvent*>* events;
+  private:
+    MidiFile *file;
+    QMultiMap<int, MidiEvent *> *events;
     int interval, position, timeoutSinceLastSignal;
     volatile bool stopped;
-    QTimer* timer;
-    QTime* time;
+    QTimer *timer;
+    QTime *time;
 
     int measure, posInMeasure;
 };

@@ -43,18 +43,18 @@ class MatrixWidget : public PaintWidget {
 
     Q_OBJECT
 
-public:
-    MatrixWidget(QWidget* parent = 0);
-    void setFile(MidiFile* file);
-    MidiFile* midiFile();
-    QList<MidiEvent*>* activeEvents();
-    QList<MidiEvent*>* velocityEvents();
+  public:
+    MatrixWidget(QWidget *parent = 0);
+    void setFile(MidiFile *file);
+    MidiFile *midiFile();
+    QList<MidiEvent *> *activeEvents();
+    QList<MidiEvent *> *velocityEvents();
 
     double lineHeight();
     int lineAtY(int y);
     int msOfXPos(int x);
     int timeMsOfWidth(int w);
-    bool eventInWidget(MidiEvent* event);
+    bool eventInWidget(MidiEvent *event);
     int yPosOfLine(int line);
     void setScreenLocked(bool b);
     bool screenLocked();
@@ -67,9 +67,9 @@ public:
 
     int msOfTick(int tick);
     int xPosOfMs(int ms);
-    QList<QPair<int, int> > divs();
+    QList<QPair<int, int>> divs();
 
-public slots:
+  public slots:
     void scrollXChanged(int scrollPositionX);
     void scrollYChanged(int scrollPositionY);
     void zoomHorIn();
@@ -80,58 +80,55 @@ public slots:
     void timeMsChanged(int ms, bool ignoreLocked = false);
     void registerRelayout();
     void calcSizes();
-    void takeKeyPressEvent(QKeyEvent* event);
-    void takeKeyReleaseEvent(QKeyEvent* event);
+    void takeKeyPressEvent(QKeyEvent *event);
+    void takeKeyReleaseEvent(QKeyEvent *event);
     void setDiv(int div);
     int div();
 
-signals:
-    void sizeChanged(int maxScrollTime, int maxScrollLine, int valueX,
-        int valueY);
+  signals:
+    void sizeChanged(int maxScrollTime, int maxScrollLine, int valueX, int valueY);
     void objectListChanged();
     void scrollChanged(int startMs, int maxMs, int startLine, int maxLine);
 
-protected:
-    void paintEvent(QPaintEvent* event);
-    void mouseMoveEvent(QMouseEvent* event);
-    void resizeEvent(QResizeEvent* event);
-    void enterEvent(QEvent* event);
-    void leaveEvent(QEvent* event);
-    void mousePressEvent(QMouseEvent* event);
-    void mouseDoubleClickEvent(QMouseEvent* event);
-    void mouseReleaseEvent(QMouseEvent* event);
-    void keyPressEvent(QKeyEvent* e);
-    void keyReleaseEvent(QKeyEvent* event);
-    void wheelEvent(QWheelEvent* event);
+  protected:
+    void paintEvent(QPaintEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
+    void resizeEvent(QResizeEvent *event);
+    void enterEvent(QEvent *event);
+    void leaveEvent(QEvent *event);
+    void mousePressEvent(QMouseEvent *event);
+    void mouseDoubleClickEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
+    void keyPressEvent(QKeyEvent *e);
+    void keyReleaseEvent(QKeyEvent *event);
+    void wheelEvent(QWheelEvent *event);
 
-private:
-    void paintChannel(QPainter* painter, int channel);
-    void paintPianoKey(QPainter* painter, int number, int x, int y,
-        int width, int height);
+  private:
+    void paintChannel(QPainter *painter, int channel);
+    void paintPianoKey(QPainter *painter, int number, int x, int y, int width, int height);
 
-    int startTick, endTick, startTimeX, endTimeX, startLineY, endLineY,
-        lineNameWidth, timeHeight, msOfFirstEventInList;
+    int startTick, endTick, startTimeX, endTimeX, startLineY, endLineY, lineNameWidth, timeHeight, msOfFirstEventInList;
     double scaleX, scaleY;
-    MidiFile* file;
+    MidiFile *file;
 
     QRectF ToolArea, PianoArea, TimeLineArea;
     bool screen_locked;
 
     // pixmap is the painted widget (without tools and cursorLines).
     // it will be zero if it needs to be repainted
-    QPixmap* pixmap;
+    QPixmap *pixmap;
 
     // saves all TempoEvents from one before the first shown tick to the
     // last in the window
-    QList<MidiEvent*>* currentTempoEvents;
-    QList<TimeSignatureEvent*>* currentTimeSignatureEvents;
+    QList<MidiEvent *> *currentTempoEvents;
+    QList<TimeSignatureEvent *> *currentTimeSignatureEvents;
 
     // All Events to show in the velocityWidget are saved in velocityObjects
     QList<MidiEvent *> *objects, *velocityObjects;
-    QList<QPair<int, int> > currentDivs;
+    QList<QPair<int, int>> currentDivs;
 
     // To play the pianokeys, there is one NoteOnEvent
-    NoteOnEvent* pianoEvent;
+    NoteOnEvent *pianoEvent;
 
     bool _colorsByChannels;
     int _div;
@@ -139,7 +136,6 @@ private:
     QMap<int, QRect> pianoKeys;
 
     static const unsigned sharp_strip_mask = (1 << 4) | (1 << 6) | (1 << 9) | (1 << 11) | (1 << 1);
-
 };
 
 #endif

@@ -28,16 +28,16 @@ class MidiTrack;
 
 class EventTool : public EditorTool {
 
-public:
+  public:
     EventTool();
-    EventTool(EventTool& other);
+    EventTool(EventTool &other);
 
-    static void selectEvent(MidiEvent* event, bool single, bool ignoreStr = false);
-    static void deselectEvent(MidiEvent* event);
+    static void selectEvent(MidiEvent *event, bool single, bool ignoreStr = false);
+    static void deselectEvent(MidiEvent *event);
     static void clearSelection();
-    void paintSelectedEvents(QPainter* painter);
+    void paintSelectedEvents(QPainter *painter);
 
-    void changeTick(MidiEvent* event, int shiftX);
+    void changeTick(MidiEvent *event, int shiftX);
 
     static void copyAction();
     static void pasteAction();
@@ -49,14 +49,14 @@ public:
     static void setPasteChannel(int channel);
     static int pasteChannel();
 
-    int rasteredX(int x, int* tick = 0);
+    int rasteredX(int x, int *tick = 0);
 
     static void enableMagnet(bool enable);
     static bool magnetEnabled();
 
-    static QList<MidiEvent*>* copiedEvents;
+    static QList<MidiEvent *> *copiedEvents;
 
-protected:
+  protected:
     static bool isCutAction;
     static int _pasteChannel;
     static int _pasteTrack;

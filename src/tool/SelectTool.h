@@ -30,11 +30,11 @@ class MidiEvent;
 
 class SelectTool : public EventTool {
 
-public:
+  public:
     SelectTool(int type);
-    SelectTool(SelectTool& other);
+    SelectTool(SelectTool &other);
 
-    void draw(QPainter* painter);
+    void draw(QPainter *painter);
 
     bool press(bool leftClick);
     bool release();
@@ -42,13 +42,13 @@ public:
 
     bool move(int mouseX, int mouseY);
 
-    ProtocolEntry* copy();
-    void reloadState(ProtocolEntry* entry);
-    bool inRect(MidiEvent* event, int x_start, int y_start, int x_end, int y_end);
+    ProtocolEntry *copy();
+    void reloadState(ProtocolEntry *entry);
+    bool inRect(MidiEvent *event, int x_start, int y_start, int x_end, int y_end);
 
     bool showsSelection();
 
-protected:
+  protected:
     int stool_type;
     int x_rect, y_rect;
 };
