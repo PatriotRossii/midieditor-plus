@@ -87,35 +87,19 @@ MidiFile::MidiFile()
     calcMaxTime();
 }
 
-MidiFile::MidiFile(QString path, bool* ok, QStringList* log)
-{
-
-    if (!log) {
-        log = new QStringList();
-    }
-
+void MidiFile::initialize(QDataStream* stream, bool* ok, QStringList* log) {
     _pauseTick = -1;
-    _saved = true;
+    _saved = false;
     midiTicks = 0;
     _cursorTick = 0;
     prot = new Protocol(this);
     prot->addEmptyAction("File opened");
-    _path = path;
     _tracks = new QList<MidiTrack*>();
-    QFile* f = new QFile(path);
-
-    if (!f->open(QIODevice::ReadOnly)) {
-        *ok = false;
-        log->append("Error: File could not be opened.");
-        printLog(log);
-        return;
-    }
 
     for (int i = 0; i < 19; i++) {
         channels[i] = new MidiChannel(this, i);
     }
 
-    QDataStream* stream = new QDataStream(f);
     stream->setByteOrder(QDataStream::BigEndian);
     if (!readMidiFile(stream, log)) {
         *ok = false;
@@ -129,6 +113,27 @@ MidiFile::MidiFile(QString path, bool* ok, QStringList* log)
     printLog(log);
 }
 
+MidiFile::MidiFile(QString path, bool* ok, QStringList* log)
+{
+
+    if (!log) {
+        log = new QStringList();
+    }
+
+    _path = path;
+    QFile* f = new QFile(path);
+
+    if (!f->open(QIODevice::ReadOnly)) {
+        *ok = false;
+        log->append("Error: File could not be opened.");
+        printLog(log);
+        return;
+    }
+
+    QDataStream* stream = new QDataStream(f);
+    this->initialize(stream, ok, log);
+}
+
 MidiFile::MidiFile(QByteArray& raw_midi, bool* ok, QStringList* log)
 {
 
@@ -136,31 +141,8 @@ MidiFile::MidiFile(QByteArray& raw_midi, bool* ok, QStringList* log)
         log = new QStringList();
     }
 
-    _pauseTick = -1;
-    _saved = false;
-    midiTicks = 0;
-    _cursorTick = 0;
-    prot = new Protocol(this);
-    prot->addEmptyAction("File opened");
-    _tracks = new QList<MidiTrack*>();
-
-
-    for (int i = 0; i < 19; i++) {
-        channels[i] = new MidiChannel(this, i);
-    }
-
     QDataStream* stream = new QDataStream(raw_midi);
-    stream->setByteOrder(QDataStream::BigEndian);
-    if (!readMidiFile(stream, log)) {
-        *ok = false;
-        printLog(log);
-        return;
-    }
-
-    *ok = true;
-    playerMap = new QMultiMap<int, MidiEvent*>;
-    calcMaxTime();
-    printLog(log);
+    this->initialize(stream, ok, log);
 }
 
 MidiFile::MidiFile(int ticks, Protocol* p)

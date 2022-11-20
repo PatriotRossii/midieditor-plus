@@ -113,6 +113,8 @@ signals:
     void trackChanged();
 
 private:
+    void initialize(QDataStream* stream, bool* ok, QStringList* log);
+
     bool readMidiFile(QDataStream* content, QStringList* log);
     bool readTrack(QDataStream* content, int num, QStringList* log);
     int deltaTime(QDataStream* content);
