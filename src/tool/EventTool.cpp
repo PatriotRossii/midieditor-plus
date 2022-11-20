@@ -43,18 +43,11 @@ int EventTool::_pasteTrack = -2;
 bool EventTool::_magnet = false;
 QSharedMemory EventTool::sharedMemory = QSharedMemory("midieditor_copy_paste_memory");
 
-EventTool::EventTool()
-    : EditorTool()
-{
-}
+EventTool::EventTool() : EditorTool() {}
 
-EventTool::EventTool(EventTool& other)
-    : EditorTool(other)
-{
-}
+EventTool::EventTool(EventTool &other) : EditorTool(other) {}
 
-void EventTool::selectEvent(MidiEvent* event, bool single, bool ignoreStr)
-{
+void EventTool::selectEvent(MidiEvent *event, bool single, bool ignoreStr) {
 
     if (!event->file()->channel(event->channel())->visible()) {
         return;
@@ -64,16 +57,17 @@ void EventTool::selectEvent(MidiEvent* event, bool single, bool ignoreStr)
         return;
     }
 
-    QList<MidiEvent*> selected = Selection::instance()->selectedEvents();
+    QList<MidiEvent *> selected = Selection::instance()->selectedEvents();
 
-    OffEvent* offevent = dynamic_cast<OffEvent*>(event);
+    OffEvent *offevent = dynamic_cast<OffEvent *>(event);
     if (offevent) {
         return;
     }
 
-    if (single && !QApplication::keyboardModifiers().testFlag(Qt::ShiftModifier) && (!QApplication::keyboardModifiers().testFlag(Qt::ControlModifier) || ignoreStr)) {
+    if (single && !QApplication::keyboardModifiers().testFlag(Qt::ShiftModifier) &&
+        (!QApplication::keyboardModifiers().testFlag(Qt::ControlModifier) || ignoreStr)) {
         selected.clear();
-        NoteOnEvent* on = dynamic_cast<NoteOnEvent*>(event);
+        NoteOnEvent *on = dynamic_cast<NoteOnEvent *>(event);
         if (on) {
             MidiPlayer::play(on);
         }
@@ -88,10 +82,9 @@ void EventTool::selectEvent(MidiEvent* event, bool single, bool ignoreStr)
     _mainWindow->eventWidget()->reportSelectionChangedByTool();
 }
 
-void EventTool::deselectEvent(MidiEvent* event)
-{
+void EventTool::deselectEvent(MidiEvent *event) {
 
-    QList<MidiEvent*> selected = Selection::instance()->selectedEvents();
+    QList<MidiEvent *> selected = Selection::instance()->selectedEvents();
     selected.removeAll(event);
     Selection::instance()->setSelection(selected);
 
@@ -100,20 +93,18 @@ void EventTool::deselectEvent(MidiEvent* event)
     }
 }
 
-void EventTool::clearSelection()
-{
+void EventTool::clearSelection() {
     Selection::instance()->clearSelection();
     _mainWindow->eventWidget()->reportSelectionChangedByTool();
 }
 
-void EventTool::paintSelectedEvents(QPainter* painter)
-{
-    foreach (MidiEvent* event, Selection::instance()->selectedEvents()) {
+void EventTool::paintSelectedEvents(QPainter *painter) {
+    foreach (MidiEvent *event, Selection::instance()->selectedEvents()) {
 
         bool show = event->shown();
 
         if (!show) {
-            OnEvent* ev = dynamic_cast<OnEvent*>(event);
+            OnEvent *ev = dynamic_cast<OnEvent *>(event);
             if (ev) {
                 show = ev->offEvent() && ev->offEvent()->shown();
             }
@@ -129,16 +120,14 @@ void EventTool::paintSelectedEvents(QPainter* painter)
         if (show) {
             painter->setBrush(Qt::darkBlue);
             painter->setPen(Qt::lightGray);
-            painter->drawRoundedRect(event->x(), event->y(), event->width(),
-                event->height(), 1, 1);
+            painter->drawRoundedRect(event->x(), event->y(), event->width(), event->height(), 1, 1);
         }
     }
 }
 
-void EventTool::changeTick(MidiEvent* event, int shiftX)
-{
+void EventTool::changeTick(MidiEvent *event, int shiftX) {
     // TODO: falls event gezeigt ist, über matrixWidget tick erfragen (effizienter)
-    //int newMs = matrixWidget->msOfXPos(event->x()-shiftX);
+    // int newMs = matrixWidget->msOfXPos(event->x()-shiftX);
 
     int newMs = file()->msOfTick(event->midiTime()) - matrixWidget->timeMsOfWidth(shiftX);
     int tick = file()->tick(newMs);
@@ -163,8 +152,7 @@ void EventTool::changeTick(MidiEvent* event, int shiftX)
     event->setMidiTime(tick);
 }
 
-void EventTool::copyAction()
-{
+void EventTool::copyAction() {
     if (Selection::instance()->selectedEvents().size() > 0) {
         // clear old copied Events
         //copiedEvents->clear();
@@ -172,13 +160,13 @@ void EventTool::copyAction()
         copyFile.setTicksPerQuarter(Selection::instance()->selectedEvents().first()->file()->ticksPerQuarter());
         MidiTrack* copyTrack = copyFile.track(1);
 
-        foreach (MidiEvent* event, Selection::instance()->selectedEvents()) {
+        foreach (MidiEvent *event, Selection::instance()->selectedEvents()) {
 
             // add the current Event
-            MidiEvent* ev = dynamic_cast<MidiEvent*>(event->copy());
+            MidiEvent *ev = dynamic_cast<MidiEvent *>(event->copy());
             if (ev) {
                 // do not append off event here
-                OffEvent* off = dynamic_cast<OffEvent*>(ev);
+                OffEvent *off = dynamic_cast<OffEvent *>(ev);
                 if (!off) {
                     //copiedEvents->append(ev);
                     ev->setTrack(copyTrack, false);
@@ -189,9 +177,9 @@ void EventTool::copyAction()
             }
 
             // if its onEvent, add a copy of the OffEvent
-            OnEvent* onEv = dynamic_cast<OnEvent*>(ev);
+            OnEvent *onEv = dynamic_cast<OnEvent *>(ev);
             if (onEv) {
-                OffEvent* offEv = dynamic_cast<OffEvent*>(onEv->offEvent()->copy());
+                OffEvent *offEv = dynamic_cast<OffEvent *>(onEv->offEvent()->copy());
                 if (offEv) {
                     offEv->setOnEvent(onEv);
                     //copiedEvents->append(offEv);
@@ -266,19 +254,19 @@ void EventTool::pasteAction()
     foreach (MidiEvent* event, *pasted_file.channelEvents(0)) {
 
         // add the current Event
-        MidiEvent* ev = dynamic_cast<MidiEvent*>(event->copy());
+        MidiEvent *ev = dynamic_cast<MidiEvent *>(event->copy());
         if (ev) {
             // do not append off event here
-            OffEvent* off = dynamic_cast<OffEvent*>(ev);
+            OffEvent *off = dynamic_cast<OffEvent *>(ev);
             if (!off) {
                 copiedCopiedEvents.append(ev);
             }
         }
 
         // if its onEvent, add a copy of the OffEvent
-        OnEvent* onEv = dynamic_cast<OnEvent*>(ev);
+        OnEvent *onEv = dynamic_cast<OnEvent *>(ev);
         if (onEv) {
-            OffEvent* offEv = dynamic_cast<OffEvent*>(onEv->offEvent()->copy());
+            OffEvent *offEv = dynamic_cast<OffEvent *>(onEv->offEvent()->copy());
             if (offEv) {
                 offEv->setOnEvent(onEv);
                 copiedCopiedEvents.append(offEv);
@@ -300,7 +288,7 @@ void EventTool::pasteAction()
 
         // get first Tick of the copied events
         int firstTick = -1;
-        foreach (MidiEvent* event, copiedCopiedEvents) {
+        foreach (MidiEvent *event, copiedCopiedEvents) {
             if ((int)(tickscale * event->midiTime()) < firstTick || firstTick < 0) {
                 firstTick = (int)(tickscale * event->midiTime());
             }
@@ -315,7 +303,7 @@ void EventTool::pasteAction()
         // set the Positions and add the Events to the channels
         clearSelection();
 
-        foreach (MidiEvent* event, copiedCopiedEvents) {
+        foreach (MidiEvent *event, copiedCopiedEvents) {
 
             // get channel
             int channel = event->channel();
@@ -327,7 +315,7 @@ void EventTool::pasteAction()
             }
 
             // get track
-            MidiTrack* track = event->track();
+            MidiTrack *track = event->track();
             if (pasteTrack() == -2) {
                 track = currentFile()->track(NewNoteTool::editTrack());
             } else if ((pasteTrack() >= 0) && (pasteTrack() < currentFile()->tracks()->size())) {
@@ -346,8 +334,7 @@ void EventTool::pasteAction()
             event->setFile(currentFile());
             event->setChannel(channel, false);
             event->setTrack(track, false);
-            currentFile()->channel(channel)->insertEvent(event,
-                (int)(tickscale * event->midiTime()) + diff);
+            currentFile()->channel(channel)->insertEvent(event, (int)(tickscale * event->midiTime()) + diff);
             selectEvent(event, false, true);
         }
 
@@ -355,33 +342,27 @@ void EventTool::pasteAction()
     }
 }
 
-bool EventTool::showsSelection()
-{
+bool EventTool::showsSelection() {
     return false;
 }
 
-void EventTool::setPasteTrack(int track)
-{
+void EventTool::setPasteTrack(int track) {
     _pasteTrack = track;
 }
 
-int EventTool::pasteTrack()
-{
+int EventTool::pasteTrack() {
     return _pasteTrack;
 }
 
-void EventTool::setPasteChannel(int channel)
-{
+void EventTool::setPasteChannel(int channel) {
     _pasteChannel = channel;
 }
 
-int EventTool::pasteChannel()
-{
+int EventTool::pasteChannel() {
     return _pasteChannel;
 }
 
-int EventTool::rasteredX(int x, int* tick)
-{
+int EventTool::rasteredX(int x, int *tick) {
     if (!_magnet) {
         if (tick) {
             *tick = _currentFile->tick(matrixWidget->msOfXPos(x));
@@ -404,12 +385,10 @@ int EventTool::rasteredX(int x, int* tick)
     return x;
 }
 
-void EventTool::enableMagnet(bool enable)
-{
+void EventTool::enableMagnet(bool enable) {
     _magnet = enable;
 }
 
-bool EventTool::magnetEnabled()
-{
+bool EventTool::magnetEnabled() {
     return _magnet;
 }

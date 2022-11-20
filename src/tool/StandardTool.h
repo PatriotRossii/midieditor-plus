@@ -28,23 +28,23 @@ class NewNoteTool;
 
 class StandardTool : public EventTool {
 
-public:
+  public:
     StandardTool();
-    StandardTool(StandardTool& other);
+    StandardTool(StandardTool &other);
 
-    void draw(QPainter* painter);
+    void draw(QPainter *painter);
     bool press(bool leftClick);
     bool move(int mouseX, int mouseY);
     bool release();
 
-    ProtocolEntry* copy();
-    void reloadState(ProtocolEntry* entry);
+    ProtocolEntry *copy();
+    void reloadState(ProtocolEntry *entry);
     bool showsSelection();
 
-private:
-    EventMoveTool* moveTool;
-    SelectTool* selectTool;
-    SizeChangeTool* sizeChangeTool;
-    NewNoteTool* newNoteTool;
+  private:
+    EventMoveTool *moveTool;
+    SelectTool *selectTool;
+    SizeChangeTool *sizeChangeTool;
+    NewNoteTool *newNoteTool;
 };
 #endif

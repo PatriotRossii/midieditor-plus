@@ -35,15 +35,14 @@
 
 #include "MidiOutput.h"
 
-RtMidiIn* MidiInput::_midiIn = 0;
+RtMidiIn *MidiInput::_midiIn = 0;
 QString MidiInput::_inPort = "";
-QMultiMap<int, std::vector<unsigned char> >* MidiInput::_messages = new QMultiMap<int, std::vector<unsigned char> >;
+QMultiMap<int, std::vector<unsigned char>> *MidiInput::_messages = new QMultiMap<int, std::vector<unsigned char>>;
 int MidiInput::_currentTime = 0;
 bool MidiInput::_recording = false;
 bool MidiInput::_thru = false;
 
-void MidiInput::init()
-{
+void MidiInput::init() {
 
     // RtMidiIn constructor
     try {
@@ -51,13 +50,12 @@ void MidiInput::init()
         //_midiIn->setQueueSizeLimit(65535);
         _midiIn->ignoreTypes(false, true, true);
         _midiIn->setCallback(&receiveMessage);
-    } catch (RtMidiError& error) {
+    } catch (RtMidiError &error) {
         error.printMessage();
     }
 }
 
-void MidiInput::receiveMessage(double deltatime, std::vector<unsigned char>* message, void* userData)
-{
+void MidiInput::receiveMessage(double deltatime, std::vector<unsigned char> *message, void *userData) {
     if (message->size() > 1) {
         _messages->insert(_currentTime, *message);
     }
@@ -104,8 +102,7 @@ void MidiInput::receiveMessage(double deltatime, std::vector<unsigned char>* mes
     }
 }
 
-QStringList MidiInput::inputPorts()
-{
+QStringList MidiInput::inputPorts() {
 
     QStringList ports;
 
@@ -116,15 +113,14 @@ QStringList MidiInput::inputPorts()
 
         try {
             ports.append(QString::fromStdString(_midiIn->getPortName(i)));
-        } catch (RtMidiError&) {
+        } catch (RtMidiError &) {
         }
     }
 
     return ports;
 }
 
-bool MidiInput::setInputPort(QString name)
-{
+bool MidiInput::setInputPort(QString name) {
 
     // try to find the port
     unsigned int nPorts = _midiIn->getPortCount();
@@ -143,7 +139,7 @@ bool MidiInput::setInputPort(QString name)
                 return true;
             }
 
-        } catch (RtMidiError&) {
+        } catch (RtMidiError &) {
         }
     }
 
@@ -151,13 +147,11 @@ bool MidiInput::setInputPort(QString name)
     return false;
 }
 
-QString MidiInput::inputPort()
-{
+QString MidiInput::inputPort() {
     return _inPort;
 }
 
-void MidiInput::startInput()
-{
+void MidiInput::startInput() {
 
     // clear eventlist
     _messages->clear();
@@ -165,20 +159,19 @@ void MidiInput::startInput()
     _recording = true;
 }
 
-QMultiMap<int, MidiEvent*> MidiInput::endInput(MidiTrack* track)
-{
+QMultiMap<int, MidiEvent *> MidiInput::endInput(MidiTrack *track) {
 
-    QMultiMap<int, MidiEvent*> eventList;
+    QMultiMap<int, MidiEvent *> eventList;
     QByteArray array;
 
-    QMultiMap<int, std::vector<unsigned char> >::iterator it = _messages->begin();
+    QMultiMap<int, std::vector<unsigned char>>::iterator it = _messages->begin();
 
     bool ok = true;
     bool endEvent = false;
 
     _recording = false;
 
-    QMultiMap<int, OffEvent*> emptyOffEvents;
+    QMultiMap<int, OffEvent *> emptyOffEvents;
 
     while (ok && it != _messages->end()) {
 
@@ -190,8 +183,8 @@ QMultiMap<int, MidiEvent*> MidiInput::endInput(MidiTrack* track)
 
         QDataStream tempStream(array);
 
-        MidiEvent* event = MidiEvent::loadMidiEvent(&tempStream, &ok, &endEvent, track);
-        OffEvent* off = dynamic_cast<OffEvent*>(event);
+        MidiEvent *event = MidiEvent::loadMidiEvent(&tempStream, &ok, &endEvent, track);
+        OffEvent *off = dynamic_cast<OffEvent *>(event);
         if (off && !off->onEvent()) {
             emptyOffEvents.insert(it.key(), off);
             it++;
@@ -202,9 +195,9 @@ QMultiMap<int, MidiEvent*> MidiInput::endInput(MidiTrack* track)
         }
         // if on event, check whether the off event has been loaded before.
         // this occurs when RTMidi fails to send the correct order
-        OnEvent* on = dynamic_cast<OnEvent*>(event);
+        OnEvent *on = dynamic_cast<OnEvent *>(event);
         if (on && emptyOffEvents.contains(it.key())) {
-            QMultiMap<int, OffEvent*>::iterator emptyIt = emptyOffEvents.lowerBound(it.key());
+            QMultiMap<int, OffEvent *>::iterator emptyIt = emptyOffEvents.lowerBound(it.key());
             while (emptyIt != emptyOffEvents.end() && emptyIt.key() == it.key()) {
                 if (emptyIt.value()->line() == on->line()) {
                     emptyIt.value()->setOnEvent(on);
@@ -219,9 +212,9 @@ QMultiMap<int, MidiEvent*> MidiInput::endInput(MidiTrack* track)
         }
         it++;
     }
-    QMultiMap<int, MidiEvent*>::iterator it2 = eventList.begin();
+    QMultiMap<int, MidiEvent *>::iterator it2 = eventList.begin();
     while (it2 != eventList.end()) {
-        OnEvent* on = dynamic_cast<OnEvent*>(it2.value());
+        OnEvent *on = dynamic_cast<OnEvent *>(it2.value());
         if (on && !on->offEvent()) {
             eventList.remove(it2.key(), it2.value());
         }
@@ -232,24 +225,26 @@ QMultiMap<int, MidiEvent*> MidiInput::endInput(MidiTrack* track)
     _currentTime = 0;
 
     // perform consistency check
-    QMultiMap<int, MidiEvent*> toRemove;
+    QMultiMap<int, MidiEvent *> toRemove;
     QList<int> allTicks = toUnique(eventList.keys());
 
     foreach (int tick, allTicks) {
 
         int id = 0;
-        QMultiMap<int, MidiEvent*> sortedByChannel;
-        foreach (MidiEvent* event, eventList.values(tick)) {
+        QMultiMap<int, MidiEvent *> sortedByChannel;
+        foreach (MidiEvent *event, eventList.values(tick)) {
             event->setTemporaryRecordID(id);
             sortedByChannel.insert(event->channel(), event);
             id++;
         }
 
         foreach (int channel, toUnique(sortedByChannel.keys())) {
-            QMultiMap<int, MidiEvent*> sortedByLine;
+            QMultiMap<int, MidiEvent *> sortedByLine;
 
-            foreach (MidiEvent* event, sortedByChannel.values(channel)) {
-                if ((event->line() == MidiEvent::CONTROLLER_LINE) || (event->line() == MidiEvent::PITCH_BEND_LINE) || (event->line() == MidiEvent::CHANNEL_PRESSURE_LINE) || (event->line() == MidiEvent::KEY_PRESSURE_LINE)) {
+            foreach (MidiEvent *event, sortedByChannel.values(channel)) {
+                if ((event->line() == MidiEvent::CONTROLLER_LINE) || (event->line() == MidiEvent::PITCH_BEND_LINE) ||
+                    (event->line() == MidiEvent::CHANNEL_PRESSURE_LINE) ||
+                    (event->line() == MidiEvent::KEY_PRESSURE_LINE)) {
                     sortedByLine.insert(event->line(), event);
                 }
             }
@@ -261,9 +256,9 @@ QMultiMap<int, MidiEvent*> MidiInput::endInput(MidiTrack* track)
                 if (sortedByLine.values(line).size() > 1) {
 
                     if (line == MidiEvent::CONTROLLER_LINE) {
-                        QMap<int, MidiEvent*> byController;
-                        foreach (MidiEvent* event, sortedByLine.values(line)) {
-                            ControlChangeEvent* conv = dynamic_cast<ControlChangeEvent*>(event);
+                        QMap<int, MidiEvent *> byController;
+                        foreach (MidiEvent *event, sortedByLine.values(line)) {
+                            ControlChangeEvent *conv = dynamic_cast<ControlChangeEvent *>(event);
                             if (!conv) {
                                 continue;
                             }
@@ -281,9 +276,9 @@ QMultiMap<int, MidiEvent*> MidiInput::endInput(MidiTrack* track)
                     } else if ((line == MidiEvent::PITCH_BEND_LINE) || (line == MidiEvent::CHANNEL_PRESSURE_LINE)) {
 
                         // search for maximum
-                        MidiEvent* maxIdEvent = 0;
+                        MidiEvent *maxIdEvent = 0;
 
-                        foreach (MidiEvent* ev, sortedByLine.values(line)) {
+                        foreach (MidiEvent *ev, sortedByLine.values(line)) {
                             toRemove.insert(tick, ev);
                             if (!maxIdEvent || (maxIdEvent->temporaryRecordID() < ev->temporaryRecordID())) {
                                 maxIdEvent = ev;
@@ -295,9 +290,9 @@ QMultiMap<int, MidiEvent*> MidiInput::endInput(MidiTrack* track)
                         }
 
                     } else if (line == MidiEvent::KEY_PRESSURE_LINE) {
-                        QMap<int, MidiEvent*> byNote;
-                        foreach (MidiEvent* event, sortedByLine.values(line)) {
-                            KeyPressureEvent* conv = dynamic_cast<KeyPressureEvent*>(event);
+                        QMap<int, MidiEvent *> byNote;
+                        foreach (MidiEvent *event, sortedByLine.values(line)) {
+                            KeyPressureEvent *conv = dynamic_cast<KeyPressureEvent *>(event);
                             if (!conv) {
                                 continue;
                             }
@@ -319,7 +314,7 @@ QMultiMap<int, MidiEvent*> MidiInput::endInput(MidiTrack* track)
     }
 
     if (toRemove.size() > 0) {
-        QMultiMap<int, MidiEvent*>::iterator remIt = toRemove.begin();
+        QMultiMap<int, MidiEvent *>::iterator remIt = toRemove.begin();
         while (remIt != toRemove.end()) {
             eventList.remove(remIt.key(), remIt.value());
             remIt++;
@@ -329,18 +324,15 @@ QMultiMap<int, MidiEvent*> MidiInput::endInput(MidiTrack* track)
     return eventList;
 }
 
-void MidiInput::setTime(int ms)
-{
+void MidiInput::setTime(int ms) {
     _currentTime = ms;
 }
 
-bool MidiInput::recording()
-{
+bool MidiInput::recording() {
     return _recording;
 }
 
-QList<int> MidiInput::toUnique(QList<int> in)
-{
+QList<int> MidiInput::toUnique(QList<int> in) {
     QList<int> out;
     foreach (int i, in) {
         if ((out.size() == 0) || (out.last() != i)) {
@@ -350,17 +342,14 @@ QList<int> MidiInput::toUnique(QList<int> in)
     return out;
 }
 
-void MidiInput::setThruEnabled(bool b)
-{
+void MidiInput::setThruEnabled(bool b) {
     _thru = b;
 }
 
-bool MidiInput::thru()
-{
+bool MidiInput::thru() {
     return _thru;
 }
 
-bool MidiInput::isConnected()
-{
+bool MidiInput::isConnected() {
     return _inPort != "";
 }

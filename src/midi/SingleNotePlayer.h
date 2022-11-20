@@ -28,15 +28,15 @@ class SingleNotePlayer : public QObject {
 
     Q_OBJECT
 
-public:
+  public:
     SingleNotePlayer();
-    void play(NoteOnEvent* event);
+    void play(NoteOnEvent *event);
 
-public slots:
+  public slots:
     void timeout();
 
-private:
-    QTimer* timer;
+  private:
+    QTimer *timer;
     QByteArray offMessage;
     bool playing;
 };

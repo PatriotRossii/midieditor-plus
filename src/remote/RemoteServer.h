@@ -34,8 +34,8 @@ class RemoteServer : public QObject {
 
     Q_OBJECT
 
-public:
-    RemoteServer(QObject* parent = 0);
+  public:
+    RemoteServer(QObject *parent = 0);
 
     QString clientIp();
     int clientPort();
@@ -49,7 +49,7 @@ public:
     void tryConnect();
     QString clientName();
 
-public slots:
+  public slots:
 
     void receive(QString message);
     void setTime(int ms);
@@ -61,7 +61,7 @@ public slots:
     void stop();
     void pause();
 
-    void setFile(MidiFile* file);
+    void setFile(MidiFile *file);
     void setMaxTime(int ms);
 
     void setMeasure(int measure);
@@ -72,7 +72,7 @@ public slots:
     void readUDP();
     void sendMessage(QString message);
 
-signals:
+  signals:
     void connected();
 
     void playRequest();
@@ -84,11 +84,11 @@ signals:
     void setTimeRequest(int timeMs);
     void disconnected();
 
-private:
+  private:
     QTcpServer server;
-    QTcpSocket* client;
+    QTcpSocket *client;
     int _timeSentLast;
-    MidiFile* _file;
+    MidiFile *_file;
 
     QUdpSocket udpSocket;
 

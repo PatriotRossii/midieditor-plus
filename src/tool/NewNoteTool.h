@@ -23,14 +23,14 @@
 
 class NewNoteTool : public EventTool {
 
-public:
+  public:
     NewNoteTool();
-    NewNoteTool(NewNoteTool& other);
+    NewNoteTool(NewNoteTool &other);
 
-    ProtocolEntry* copy();
-    void reloadState(ProtocolEntry* entry);
+    ProtocolEntry *copy();
+    void reloadState(ProtocolEntry *entry);
 
-    void draw(QPainter* painter);
+    void draw(QPainter *painter);
     bool press(bool leftClick);
     bool release();
     bool move(int mouseX, int mouseY);
@@ -41,7 +41,7 @@ public:
     static void setEditTrack(int i);
     static void setEditChannel(int i);
 
-private:
+  private:
     bool inDrag;
     int line;
     int xPos;

@@ -24,9 +24,9 @@
 
 class TextEvent : public MidiEvent {
 
-public:
-    TextEvent(int channel, MidiTrack* track);
-    TextEvent(TextEvent& other);
+  public:
+    TextEvent(int channel, MidiTrack *track);
+    TextEvent(TextEvent &other);
 
     QString text();
     void setText(QString text);
@@ -38,18 +38,10 @@ public:
 
     QByteArray save();
 
-    virtual ProtocolEntry* copy();
-    virtual void reloadState(ProtocolEntry* entry);
+    virtual ProtocolEntry *copy();
+    virtual void reloadState(ProtocolEntry *entry);
 
-    enum {
-        TEXT = 0x01,
-        COPYRIGHT,
-        TRACKNAME,
-        INSTRUMENT_NAME,
-        LYRIK,
-        MARKER,
-        COMMENT
-    };
+    enum { TEXT = 0x01, COPYRIGHT, TRACKNAME, INSTRUMENT_NAME, LYRIK, MARKER, COMMENT };
 
     QString typeString();
     static QString textTypeString(int type);
@@ -57,7 +49,7 @@ public:
     static int getTypeForNewEvents();
     static void setTypeForNewEvents(int type);
 
-private:
+  private:
     int _type;
     QString _text;
     static int typeForNewEvents;

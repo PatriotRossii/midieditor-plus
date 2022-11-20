@@ -35,16 +35,15 @@ class MidiTrack;
 
 class MidiEvent : public ProtocolEntry, public GraphicObject {
 
-public:
-    MidiEvent(int channel, MidiTrack* track);
-    MidiEvent(MidiEvent& other);
+  public:
+    MidiEvent(int channel, MidiTrack *track);
+    MidiEvent(MidiEvent &other);
 
-    static MidiEvent* loadMidiEvent(QDataStream* content,
-        bool* ok, bool* endEvent, MidiTrack* track, quint8 startByte = 0,
-        quint8 secondByte = 0);
+    static MidiEvent *loadMidiEvent(QDataStream *content, bool *ok, bool *endEvent, MidiTrack *track,
+                                    quint8 startByte = 0, quint8 secondByte = 0);
 
-    static EventWidget* eventWidget();
-    static void setEventWidget(EventWidget* widget);
+    static EventWidget *eventWidget();
+    static void setEventWidget(EventWidget *widget);
 
     enum {
         TEMPO_CHANGE_EVENT_LINE = 128,
@@ -59,23 +58,23 @@ public:
         SYSEX_LINE,
         UNKNOWN_LINE
     };
-    void setTrack(MidiTrack* track, bool toProtocol = true);
-    MidiTrack* track();
+    void setTrack(MidiTrack *track, bool toProtocol = true);
+    MidiTrack *track();
     void setChannel(int channel, bool toProtocol = true);
     int channel();
     virtual void setMidiTime(int t, bool toProtocol = true);
     int midiTime();
-    void setFile(MidiFile* f);
-    MidiFile* file();
+    void setFile(MidiFile *f);
+    MidiFile *file();
     bool shownInEventWidget();
 
     virtual int line();
     virtual QString toMessage();
     virtual QByteArray save();
-    virtual void draw(QPainter* p, QColor c);
+    virtual void draw(QPainter *p, QColor c);
 
-    virtual ProtocolEntry* copy();
-    virtual void reloadState(ProtocolEntry* entry);
+    virtual ProtocolEntry *copy();
+    virtual void reloadState(ProtocolEntry *entry);
 
     virtual QString typeString();
 
@@ -88,12 +87,12 @@ public:
 
     virtual void moveToChannel(int channel);
 
-protected:
+  protected:
     int numChannel, timePos;
-    MidiFile* midiFile;
+    MidiFile *midiFile;
     static quint8 _startByte;
-    static EventWidget* _eventWidget;
-    MidiTrack* _track;
+    static EventWidget *_eventWidget;
+    MidiTrack *_track;
     int _tempID;
 };
 

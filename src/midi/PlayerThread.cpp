@@ -31,32 +31,26 @@
 #define INTERVAL_TIME 15
 #define TIMEOUTS_PER_SIGNAL 1
 
-PlayerThread::PlayerThread()
-    : QThread()
-{
+PlayerThread::PlayerThread() : QThread() {
     file = 0;
     timer = 0;
     timeoutSinceLastSignal = 0;
     time = 0;
 }
 
-void PlayerThread::setFile(MidiFile* f)
-{
+void PlayerThread::setFile(MidiFile *f) {
     file = f;
 }
 
-void PlayerThread::stop()
-{
+void PlayerThread::stop() {
     stopped = true;
 }
 
-void PlayerThread::setInterval(int i)
-{
+void PlayerThread::setInterval(int i) {
     interval = i;
 }
 
-void PlayerThread::run()
-{
+void PlayerThread::run() {
 
     if (!timer) {
         timer = new QTimer();
@@ -87,7 +81,7 @@ void PlayerThread::run()
     MidiOutput::playedNotes.clear();
 
     // All Events before position should be sent, progChanges and ControlChanges
-    QMultiMap<int, MidiEvent*>::iterator it = events->begin();
+    QMultiMap<int, MidiEvent *>::iterator it = events->begin();
     while (it != events->end()) {
         if (it.key() >= position) {
             break;
@@ -103,7 +97,7 @@ void PlayerThread::run()
 
     stopped = false;
 
-    QList<TimeSignatureEvent*>* list = 0;
+    QList<TimeSignatureEvent *> *list = 0;
 
     int tickInMeasure = 0;
     measure = file->measure(file->cursorTick(), file->cursorTick(), &list, &tickInMeasure);
@@ -115,8 +109,7 @@ void PlayerThread::run()
     }
 }
 
-void PlayerThread::timeout()
-{
+void PlayerThread::timeout() {
 
     if (!time) {
         time = new QTime();
@@ -153,7 +146,7 @@ void PlayerThread::timeout()
 
         int newPos = position + time->elapsed() * MidiPlayer::speedScale();
         int tick = file->tick(newPos);
-        QList<TimeSignatureEvent*>* list = 0;
+        QList<TimeSignatureEvent *> *list = 0;
         int ickInMeasure = 0;
 
         int new_measure = file->measure(tick, tick, &list, &ickInMeasure);
@@ -165,7 +158,7 @@ void PlayerThread::timeout()
             measure = new_measure;
         }
         time->restart();
-        QMultiMap<int, MidiEvent*>::iterator it = events->lowerBound(position);
+        QMultiMap<int, MidiEvent *>::iterator it = events->lowerBound(position);
 
         while (it != events->end() && it.key() < newPos) {
 
@@ -182,18 +175,18 @@ void PlayerThread::timeout()
                 it++;
             } while (it != events->end() && it.key() == sendPosition);
 
-            foreach (MidiEvent* ev, offEv) {
+            foreach (MidiEvent *ev, offEv) {
                 MidiOutput::sendCommand(ev);
             }
-            foreach (MidiEvent* ev, onEv) {
+            foreach (MidiEvent *ev, onEv) {
                 if (ev->line() == MidiEvent::KEY_SIGNATURE_EVENT_LINE) {
-                    KeySignatureEvent* keySig = dynamic_cast<KeySignatureEvent*>(ev);
+                    KeySignatureEvent *keySig = dynamic_cast<KeySignatureEvent *>(ev);
                     if (keySig) {
                         emit tonalityChanged(keySig->tonality());
                     }
                 }
                 if (ev->line() == MidiEvent::TIME_SIGNATURE_EVENT_LINE) {
-                    TimeSignatureEvent* timeSig = dynamic_cast<TimeSignatureEvent*>(ev);
+                    TimeSignatureEvent *timeSig = dynamic_cast<TimeSignatureEvent *>(ev);
                     if (timeSig) {
                         emit meterChanged(timeSig->num(), timeSig->denom());
                     }
@@ -201,8 +194,8 @@ void PlayerThread::timeout()
                 MidiOutput::sendCommand(ev);
             }
 
-            //MidiOutput::sendCommand(it.value());
-            //it++;
+            // MidiOutput::sendCommand(it.value());
+            // it++;
         }
 
         // end if it was last event, but only if not recording
@@ -221,7 +214,6 @@ void PlayerThread::timeout()
     connect(timer, SIGNAL(timeout()), this, SLOT(timeout()), Qt::DirectConnection);
 }
 
-int PlayerThread::timeMs()
-{
+int PlayerThread::timeMs() {
     return position;
 }

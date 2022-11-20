@@ -30,34 +30,32 @@ class EventWidgetDelegate : public QStyledItemDelegate {
 
     Q_OBJECT
 
-public:
-    EventWidgetDelegate(EventWidget* w, QWidget* parent = 0)
-        : QStyledItemDelegate(parent)
-    {
+  public:
+    EventWidgetDelegate(EventWidget *w, QWidget *parent = 0) : QStyledItemDelegate(parent) {
         eventWidget = w;
     }
-    QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
-    QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index) const;
-    void setEditorData(QWidget* editor, const QModelIndex& index) const;
-    void setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const;
+    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    void setEditorData(QWidget *editor, const QModelIndex &index) const;
+    void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
 
-private:
-    EventWidget* eventWidget;
+  private:
+    EventWidget *eventWidget;
 };
 
 class EventWidget : public QTableWidget {
 
     Q_OBJECT
 
-public:
-    EventWidget(QWidget* parent = 0);
+  public:
+    EventWidget(QWidget *parent = 0);
 
-    void setEvents(QList<MidiEvent*> events);
-    QList<MidiEvent*> events();
-    void removeEvent(MidiEvent* event);
+    void setEvents(QList<MidiEvent *> events);
+    QList<MidiEvent *> events();
+    void removeEvent(MidiEvent *event);
 
-    void setFile(MidiFile* file);
-    MidiFile* file();
+    void setFile(MidiFile *file);
+    MidiFile *file();
 
     enum EventType {
         MidiEventType,
@@ -96,33 +94,35 @@ public:
     };
     QVariant fieldContent(EditorField field);
 
-    EventType type() { return _currentType; }
+    EventType type() {
+        return _currentType;
+    }
 
     QStringList keyStrings();
     int keyIndex(int tonality, bool minor);
-    void getKey(int index, int* tonality, bool* minor);
+    void getKey(int index, int *tonality, bool *minor);
 
     static QString dataToString(QByteArray data);
 
     void reportSelectionChangedByTool();
 
-public slots:
+  public slots:
     void reload();
 
-signals:
+  signals:
     void selectionChanged(bool);
     void selectionChangedByTool(bool);
 
-private:
-    QList<MidiEvent*> _events;
+  private:
+    QList<MidiEvent *> _events;
 
     EventType _currentType;
     EventType computeType();
     QString eventType();
 
-    QList<QPair<QString, EditorField> > getFields();
+    QList<QPair<QString, EditorField>> getFields();
 
-    MidiFile* _file;
+    MidiFile *_file;
 };
 
 #endif

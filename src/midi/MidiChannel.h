@@ -53,130 +53,130 @@ class NoteOnEvent;
  */
 class MidiChannel : public ProtocolEntry {
 
-public:
+  public:
     /**
-		 * \brief creates a new MidiChannel with number num.
-		 *
-		 * Sets the channels file to f.
-		 */
-    MidiChannel(MidiFile* f, int num);
+     * \brief creates a new MidiChannel with number num.
+     *
+     * Sets the channels file to f.
+     */
+    MidiChannel(MidiFile *f, int num);
 
     /**
-		 * \brief creates a copy of other.
-		 */
-    MidiChannel(MidiChannel& other);
+     * \brief creates a copy of other.
+     */
+    MidiChannel(MidiChannel &other);
 
     /**
-		 * \brief returns the channels file.
-		 */
-    MidiFile* file();
+     * \brief returns the channels file.
+     */
+    MidiFile *file();
 
     /**
-		 * \brief returns the channels number.
-		 *
-		 * 0-15 are MidiChannels, 16 for general Events, 17 for TempoChanges
-		 * and 18 for TimeSignatureEvents.
-		 */
+     * \brief returns the channels number.
+     *
+     * 0-15 are MidiChannels, 16 for general Events, 17 for TempoChanges
+     * and 18 for TimeSignatureEvents.
+     */
     int number();
 
     /**
-		 * \brief returns the channels color.
-		 *
-		 * The color only depends on the channel number.
-		 */
-    QColor* color();
+     * \brief returns the channels color.
+     *
+     * The color only depends on the channel number.
+     */
+    QColor *color();
 
     /**
-		 * \brief returns the eventMap of the channel.
-		 *
-		 * This contains all MidiEvents of the channel.
-		 */
-    QMultiMap<int, MidiEvent*>* eventMap();
+     * \brief returns the eventMap of the channel.
+     *
+     * This contains all MidiEvents of the channel.
+     */
+    QMultiMap<int, MidiEvent *> *eventMap();
 
     /**
-		 * \brief inserts a note to this channel.
-		 */
-    NoteOnEvent* insertNote(int note, int startTick, int endTick, int velocity, MidiTrack* track);
+     * \brief inserts a note to this channel.
+     */
+    NoteOnEvent *insertNote(int note, int startTick, int endTick, int velocity, MidiTrack *track);
 
     /**
-		 * \brief inserts event into the channels map.
-		 */
-    void insertEvent(MidiEvent* event, int tick);
+     * \brief inserts event into the channels map.
+     */
+    void insertEvent(MidiEvent *event, int tick);
 
     /**
-		 * \brief removes event from the eventMap.
-		 */
-    bool removeEvent(MidiEvent* event);
+     * \brief removes event from the eventMap.
+     */
+    bool removeEvent(MidiEvent *event);
 
     /**
-		 * \brief returns the program number of the midi program at tick.
-		 */
+     * \brief returns the program number of the midi program at tick.
+     */
     int progAtTick(int tick);
 
     /**
-		 * \brief returns whether the channel is visible in the MatrixWidget.
-		 */
+     * \brief returns whether the channel is visible in the MatrixWidget.
+     */
     bool visible();
 
     /**
-		 * \brief sets the channels visibility to b.
-		 */
+     * \brief sets the channels visibility to b.
+     */
     void setVisible(bool b);
 
     /**
-		 * \brief returns whether the channel is muted.
-		 */
+     * \brief returns whether the channel is muted.
+     */
     bool mute();
 
     /**
-		 * \brief sets the channel mute or makes it loud.
-		 */
+     * \brief sets the channel mute or makes it loud.
+     */
     void setMute(bool b);
 
     /**
-		 * \brief returns whether the channel is playing in solo mode.
-		 *
-		 * If the channel is in solo mode, all other channels are muted.
-		 */
+     * \brief returns whether the channel is playing in solo mode.
+     *
+     * If the channel is in solo mode, all other channels are muted.
+     */
     bool solo();
 
     /**
-		 * \brief sets the solo mode to b.
-		 */
+     * \brief sets the solo mode to b.
+     */
     void setSolo(bool b);
 
     /**
-		 * \brief removes all events of the channel.
-		 */
+     * \brief removes all events of the channel.
+     */
     void deleteAllEvents();
 
     /*
-		 * The following methods reimplement methods from the superclass
-		 * ProtocolEntry
-		 */
-    ProtocolEntry* copy();
+     * The following methods reimplement methods from the superclass
+     * ProtocolEntry
+     */
+    ProtocolEntry *copy();
 
-    void reloadState(ProtocolEntry* entry);
+    void reloadState(ProtocolEntry *entry);
 
-protected:
+  protected:
     /**
-		 * \brief the midiFile of this channel.
-		 */
-    MidiFile* _midiFile;
+     * \brief the midiFile of this channel.
+     */
+    MidiFile *_midiFile;
 
     /**
-		 * \brief the flags solo, mute and visible.
-		 */
+     * \brief the flags solo, mute and visible.
+     */
     bool _visible, _mute, _solo;
 
     /**
-		 * \brief contains all MidiEvents of the channel sorted by their tick.
-		 */
-    QMultiMap<int, MidiEvent*>* _events;
+     * \brief contains all MidiEvents of the channel sorted by their tick.
+     */
+    QMultiMap<int, MidiEvent *> *_events;
 
     /**
-		 * \brief the channels number.
-		 */
+     * \brief the channels number.
+     */
     int _num;
 };
 

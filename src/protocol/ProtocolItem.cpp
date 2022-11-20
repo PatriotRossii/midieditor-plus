@@ -21,20 +21,18 @@
 #include "../midi/MidiTrack.h"
 #include "ProtocolEntry.h"
 
-ProtocolItem::ProtocolItem(ProtocolEntry* oldObj, ProtocolEntry* newObj)
-{
+ProtocolItem::ProtocolItem(ProtocolEntry *oldObj, ProtocolEntry *newObj) {
     _oldObject = oldObj;
     _newObject = newObj;
 }
 
-ProtocolItem* ProtocolItem::release()
-{
+ProtocolItem *ProtocolItem::release() {
 
-    ProtocolEntry* entry = _newObject->copy();
+    ProtocolEntry *entry = _newObject->copy();
     _newObject->reloadState(_oldObject);
 
-    //files can be protocolled too but they must not be deleted
-    if (!dynamic_cast<MidiTrack*>(entry)) {
+    // files can be protocolled too but they must not be deleted
+    if (!dynamic_cast<MidiTrack *>(entry)) {
         if (_oldObject->file() != _oldObject) {
             delete _oldObject;
         }

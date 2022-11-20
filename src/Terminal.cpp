@@ -26,10 +26,9 @@
 #include "midi/MidiInput.h"
 #include "midi/MidiOutput.h"
 
-Terminal* Terminal::_terminal = 0;
+Terminal *Terminal::_terminal = 0;
 
-Terminal::Terminal()
-{
+Terminal::Terminal() {
     _process = 0;
     _textEdit = new QTextEdit();
     _textEdit->setReadOnly(true);
@@ -38,24 +37,21 @@ Terminal::Terminal()
     _outPort = "";
 }
 
-void Terminal::initTerminal(QString startString, QString inPort,
-    QString outPort)
-{
+void Terminal::initTerminal(QString startString, QString inPort, QString outPort) {
     _terminal = new Terminal();
     _terminal->execute(startString, inPort, outPort);
 }
 
-Terminal* Terminal::terminal() { return _terminal; }
-
-void Terminal::writeString(QString message)
-{
-    _textEdit->setText(_textEdit->toPlainText() + message + "\n");
-    _textEdit->verticalScrollBar()->setValue(
-        _textEdit->verticalScrollBar()->maximum());
+Terminal *Terminal::terminal() {
+    return _terminal;
 }
 
-void Terminal::execute(QString startString, QString inPort, QString outPort)
-{
+void Terminal::writeString(QString message) {
+    _textEdit->setText(_textEdit->toPlainText() + message + "\n");
+    _textEdit->verticalScrollBar()->setValue(_textEdit->verticalScrollBar()->maximum());
+}
+
+void Terminal::execute(QString startString, QString inPort, QString outPort) {
     _inPort = inPort;
     _outPort = outPort;
 
@@ -65,10 +61,8 @@ void Terminal::execute(QString startString, QString inPort, QString outPort)
         }
         _process = new QProcess();
 
-        connect(_process, SIGNAL(readyReadStandardOutput()), this,
-            SLOT(printToTerminal()));
-        connect(_process, SIGNAL(readyReadStandardError()), this,
-            SLOT(printErrorToTerminal()));
+        connect(_process, SIGNAL(readyReadStandardOutput()), this, SLOT(printToTerminal()));
+        connect(_process, SIGNAL(readyReadStandardError()), this, SLOT(printErrorToTerminal()));
         connect(_process, SIGNAL(started()), this, SLOT(processStarted()));
 
         _process->start(startString);
@@ -77,8 +71,7 @@ void Terminal::execute(QString startString, QString inPort, QString outPort)
     }
 }
 
-void Terminal::processStarted()
-{
+void Terminal::processStarted() {
     writeString("Started process");
 
     QStringList inputVariants;
@@ -143,21 +136,21 @@ void Terminal::processStarted()
 
     // if not both are set, try again in 1 second
     if ((MidiOutput::outputPort() == "" && _outPort != "") || (MidiInput::inputPort() == "" && _inPort != "")) {
-        QTimer* timer = new QTimer();
+        QTimer *timer = new QTimer();
         connect(timer, SIGNAL(timeout()), this, SLOT(processStarted()));
         timer->setSingleShot(true);
         timer->start(1000);
     }
 }
 
-void Terminal::printToTerminal()
-{
+void Terminal::printToTerminal() {
     writeString(QString::fromLocal8Bit(_process->readAllStandardOutput()));
 }
 
-void Terminal::printErrorToTerminal()
-{
+void Terminal::printErrorToTerminal() {
     writeString(QString::fromLocal8Bit(_process->readAllStandardError()));
 }
 
-QTextEdit* Terminal::console() { return _textEdit; }
+QTextEdit *Terminal::console() {
+    return _textEdit;
+}

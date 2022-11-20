@@ -26,14 +26,15 @@ class QString;
 
 class SettingsWidget : public QWidget {
 
-public:
-    SettingsWidget(QString title, QWidget* parent = 0);
+  public:
+    SettingsWidget(QString title, QWidget *parent = 0);
     QString title();
     virtual bool accept();
-    QWidget* createInfoBox(QString info);
-    QWidget* separator();
+    QWidget *createInfoBox(QString info);
+    QWidget *separator();
     virtual QIcon icon();
-private:
+
+  private:
     QString _title;
 };
 

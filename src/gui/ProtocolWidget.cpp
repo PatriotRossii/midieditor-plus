@@ -28,20 +28,17 @@
 #define LINE_HEIGHT 20
 #define BORDER 2
 
-ProtocolWidget::ProtocolWidget(QWidget* parent)
-    : QListWidget(parent)
-{
+ProtocolWidget::ProtocolWidget(QWidget *parent) : QListWidget(parent) {
     file = 0;
     setSelectionMode(QAbstractItemView::NoSelection);
     protocolHasChanged = false;
     nextChangeFromList = false;
     setStyleSheet("QListWidget::item { border-bottom: 1px solid lightGray; }");
     setIconSize(QSize(15, 15));
-    connect(this, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(stepClicked(QListWidgetItem*)));
+    connect(this, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(stepClicked(QListWidgetItem *)));
 }
 
-void ProtocolWidget::setFile(MidiFile* f)
-{
+void ProtocolWidget::setFile(MidiFile *f) {
     file = f;
     protocolHasChanged = true;
     nextChangeFromList = false;
@@ -49,14 +46,12 @@ void ProtocolWidget::setFile(MidiFile* f)
     update();
 }
 
-void ProtocolWidget::protocolChanged()
-{
+void ProtocolWidget::protocolChanged() {
     protocolHasChanged = true;
     update();
 }
 
-void ProtocolWidget::update()
-{
+void ProtocolWidget::update() {
 
     if (protocolHasChanged) {
 
@@ -77,10 +72,10 @@ void ProtocolWidget::update()
         QFont currentFont;
         currentFont.setBold(true);
 
-        QListWidgetItem* firstToRedo = 0;
+        QListWidgetItem *firstToRedo = 0;
 
         for (int i = 0; i < stepsBack + stepsForward; i++) {
-            ProtocolStep* step;
+            ProtocolStep *step;
             QColor bg = Qt::black;
             QFont f = undoFont;
             if (i < stepsBack) {
@@ -95,7 +90,7 @@ void ProtocolWidget::update()
             }
 
             // construct item
-            QListWidgetItem* item = new QListWidgetItem(step->description());
+            QListWidgetItem *item = new QListWidgetItem(step->description());
             item->setSizeHint(QSize(0, 30));
             item->setFont(f);
             if (step->image()) {
@@ -130,8 +125,7 @@ void ProtocolWidget::update()
     QListWidget::update();
 }
 
-void ProtocolWidget::stepClicked(QListWidgetItem* item)
-{
+void ProtocolWidget::stepClicked(QListWidgetItem *item) {
 
     if (!file) {
         return;
@@ -144,7 +138,7 @@ void ProtocolWidget::stepClicked(QListWidgetItem* item)
     int stepsBack = file->protocol()->stepsBack();
     int stepsForward = file->protocol()->stepsForward();
 
-    ProtocolStep* step;
+    ProtocolStep *step;
     if (num < stepsBack) {
         step = file->protocol()->undoStep(num);
     } else {

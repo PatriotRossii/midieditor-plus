@@ -8,14 +8,14 @@ class NToleQuantizationDialog : public QDialog {
 
     Q_OBJECT
 
-public:
-    NToleQuantizationDialog(QWidget* parent = 0);
+  public:
+    NToleQuantizationDialog(QWidget *parent = 0);
     static int ntoleNNum, ntoleBeatNum, replaceNumNum, replaceDenomNum;
 
-public slots:
+  public slots:
     void takeResults();
 
-private:
+  private:
     QComboBox *ntoleN, *ntoleBeat, *replaceNum, *replaceDenom;
 };
 

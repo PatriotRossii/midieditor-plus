@@ -6,18 +6,17 @@
 
 class ColoredWidget : public QWidget {
 
-public:
-    ColoredWidget(QColor color, QWidget* parent = 0);
-    void setColor(QColor c)
-    {
+  public:
+    ColoredWidget(QColor color, QWidget *parent = 0);
+    void setColor(QColor c) {
         _color = c;
         update();
     }
 
-protected:
-    void paintEvent(QPaintEvent* event);
+  protected:
+    void paintEvent(QPaintEvent *event);
 
-private:
+  private:
     QColor _color;
 };
 

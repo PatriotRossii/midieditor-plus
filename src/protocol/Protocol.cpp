@@ -24,19 +24,17 @@
 #include "ProtocolItem.h"
 #include "ProtocolStep.h"
 
-Protocol::Protocol(MidiFile* f)
-{
+Protocol::Protocol(MidiFile *f) {
 
     _currentStep = 0;
 
     _file = f;
 
-    _undoSteps = new QList<ProtocolStep*>;
-    _redoSteps = new QList<ProtocolStep*>;
+    _undoSteps = new QList<ProtocolStep *>;
+    _redoSteps = new QList<ProtocolStep *>;
 }
 
-void Protocol::enterUndoStep(ProtocolItem* item)
-{
+void Protocol::enterUndoStep(ProtocolItem *item) {
 
     if (_currentStep) {
         _currentStep->addItem(item);
@@ -45,17 +43,16 @@ void Protocol::enterUndoStep(ProtocolItem* item)
     emit protocolChanged();
 }
 
-void Protocol::undo(bool emitChanged)
-{
+void Protocol::undo(bool emitChanged) {
 
     if (!_undoSteps->empty()) {
 
         // Take last undoStep from the Stack
-        ProtocolStep* step = _undoSteps->last();
+        ProtocolStep *step = _undoSteps->last();
         _undoSteps->removeLast();
 
         // release it and copy it to the redo Stack
-        ProtocolStep* redoAction = step->releaseStep();
+        ProtocolStep *redoAction = step->releaseStep();
         if (redoAction) {
             _redoSteps->append(redoAction);
         }
@@ -70,17 +67,16 @@ void Protocol::undo(bool emitChanged)
     }
 }
 
-void Protocol::redo(bool emitChanged)
-{
+void Protocol::redo(bool emitChanged) {
 
     if (!_redoSteps->empty()) {
 
         // Take last redoSteo from the Stack
-        ProtocolStep* step = _redoSteps->last();
+        ProtocolStep *step = _redoSteps->last();
         _redoSteps->removeLast();
 
         // release it and copy it to the undoStack
-        ProtocolStep* undoAction = step->releaseStep();
+        ProtocolStep *undoAction = step->releaseStep();
         if (undoAction) {
             _undoSteps->append(undoAction);
         }
@@ -95,8 +91,7 @@ void Protocol::redo(bool emitChanged)
     }
 }
 
-void Protocol::startNewAction(QString description, QImage* img)
-{
+void Protocol::startNewAction(QString description, QImage *img) {
 
     // When there is a new Action started the redoStack has to be cleared
     _redoSteps->clear();
@@ -108,8 +103,7 @@ void Protocol::startNewAction(QString description, QImage* img)
     _currentStep = new ProtocolStep(description, img);
 }
 
-void Protocol::endAction()
-{
+void Protocol::endAction() {
 
     // only create the Step when it exists and its size is bigger 0
     if (_currentStep && _currentStep->items() > 0) {
@@ -126,28 +120,23 @@ void Protocol::endAction()
     emit actionFinished();
 }
 
-int Protocol::stepsBack()
-{
+int Protocol::stepsBack() {
     return _undoSteps->count();
 }
 
-int Protocol::stepsForward()
-{
+int Protocol::stepsForward() {
     return _redoSteps->count();
 }
 
-ProtocolStep* Protocol::undoStep(int i)
-{
+ProtocolStep *Protocol::undoStep(int i) {
     return _undoSteps->at(i);
 }
 
-ProtocolStep* Protocol::redoStep(int i)
-{
+ProtocolStep *Protocol::redoStep(int i) {
     return _redoSteps->at(i);
 }
 
-void Protocol::goTo(ProtocolStep* toGo)
-{
+void Protocol::goTo(ProtocolStep *toGo) {
 
     if (_undoSteps->contains(toGo)) {
 
@@ -168,7 +157,6 @@ void Protocol::goTo(ProtocolStep* toGo)
     emit actionFinished();
 }
 
-void Protocol::addEmptyAction(QString name)
-{
+void Protocol::addEmptyAction(QString name) {
     _undoSteps->append(new ProtocolStep(name));
 }

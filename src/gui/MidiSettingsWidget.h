@@ -33,37 +33,38 @@ class AdditionalMidiSettingsWidget : public SettingsWidget {
 
     Q_OBJECT
 
-public:
-    AdditionalMidiSettingsWidget(QSettings* settings, QWidget* parent = 0);
+  public:
+    AdditionalMidiSettingsWidget(QSettings *settings, QWidget *parent = 0);
     bool accept();
 
-public slots:
+  public slots:
     void manualModeToggled(bool enable);
     void setDefaultTimePerQuarter(int value);
     void setMetronomeLoudness(int value);
-private:
-    QCheckBox* _alternativePlayerModeBox;
-    QSettings* _settings;
-    QLineEdit* startCmd;
-    QSpinBox* _tpqBox;
-    QSpinBox* _metronomeLoudnessBox;
+
+  private:
+    QCheckBox *_alternativePlayerModeBox;
+    QSettings *_settings;
+    QLineEdit *startCmd;
+    QSpinBox *_tpqBox;
+    QSpinBox *_metronomeLoudnessBox;
 };
 
 class MidiSettingsWidget : public SettingsWidget {
 
     Q_OBJECT
 
-public:
-    MidiSettingsWidget(QWidget* parent = 0);
+  public:
+    MidiSettingsWidget(QWidget *parent = 0);
 
-public slots:
+  public slots:
 
     void reloadInputPorts();
     void reloadOutputPorts();
-    void inputChanged(QListWidgetItem* item);
-    void outputChanged(QListWidgetItem* item);
+    void inputChanged(QListWidgetItem *item);
+    void outputChanged(QListWidgetItem *item);
 
-private:
+  private:
     QStringList *_inputPorts, *_outputPorts;
     QListWidget *_inList, *_outList;
 };

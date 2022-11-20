@@ -22,21 +22,21 @@
 class MainWindow;
 
 class SelectionNavigator {
-public:
-    SelectionNavigator(MainWindow* mainWindow);
+  public:
+    SelectionNavigator(MainWindow *mainWindow);
     void up();
     void down();
     void left();
     void right();
 
-protected:
-    MainWindow* mainWindow;
+  protected:
+    MainWindow *mainWindow;
 
     void navigate(qreal searchAngle);
-    MidiEvent* getFirstSelectedEvent();
-    bool eventIsInVisibleTimeRange(MidiEvent* event);
-    bool eventsAreSameType(MidiEvent* event1, MidiEvent* event2);
-    qreal getDisplayDistanceWeightedByDirection(MidiEvent* originEvent, MidiEvent* targetEvent, qreal searchAngle);
+    MidiEvent *getFirstSelectedEvent();
+    bool eventIsInVisibleTimeRange(MidiEvent *event);
+    bool eventsAreSameType(MidiEvent *event1, MidiEvent *event2);
+    qreal getDisplayDistanceWeightedByDirection(MidiEvent *originEvent, MidiEvent *targetEvent, qreal searchAngle);
 };
 
 #endif

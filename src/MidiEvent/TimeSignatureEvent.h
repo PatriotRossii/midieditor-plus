@@ -23,19 +23,18 @@
 
 class TimeSignatureEvent : public MidiEvent {
 
-public:
-    TimeSignatureEvent(int channel, int num, int denom, int midiClocks,
-        int num32In4, MidiTrack* track);
-    TimeSignatureEvent(TimeSignatureEvent& other);
+  public:
+    TimeSignatureEvent(int channel, int num, int denom, int midiClocks, int num32In4, MidiTrack *track);
+    TimeSignatureEvent(TimeSignatureEvent &other);
     int num();
     int denom();
     int midiClocks();
     int num32In4();
-    int measures(int tick, int* ticksLeft = 0);
+    int measures(int tick, int *ticksLeft = 0);
     int ticksPerMeasure();
 
-    virtual ProtocolEntry* copy();
-    virtual void reloadState(ProtocolEntry* entry);
+    virtual ProtocolEntry *copy();
+    virtual void reloadState(ProtocolEntry *entry);
     int line();
     QByteArray save();
 
@@ -44,7 +43,7 @@ public:
 
     QString typeString();
 
-private:
+  private:
     int numerator, denominator, midiClocksPerMetronome, num32In4th;
 };
 

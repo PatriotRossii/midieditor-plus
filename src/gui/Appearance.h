@@ -4,9 +4,8 @@
 #include <QSettings>
 #include <QColor>
 
-class Appearance
-{
-public:
+class Appearance {
+  public:
     static void init(QSettings *settings);
     static QColor *channelColor(int channel);
     static QColor *trackColor(int track);
@@ -17,11 +16,11 @@ public:
     static int opacity();
     static void setOpacity(int opacity);
 
-private:
+  private:
     static int trackToColorIndex(int track);
     static int channelToColorIndex(int channel);
-    static QMap<int, QColor*> channelColors;
-    static QMap<int, QColor*> trackColors;
+    static QMap<int, QColor *> channelColors;
+    static QMap<int, QColor *> trackColors;
     static QColor *defaultColor(int n);
     static QColor *decode(QString name, QSettings *settings, QColor *defaultColor);
     static void write(QString name, QSettings *settings, QColor *color);

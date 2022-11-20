@@ -21,14 +21,12 @@
 #include "../MidiEvent/NoteOnEvent.h"
 #include "../MidiEvent/OffEvent.h"
 
-SenderThread::SenderThread()
-{
-    _eventQueue = new QQueue<MidiEvent*>;
-    _noteQueue = new QQueue<MidiEvent*>;
+SenderThread::SenderThread() {
+    _eventQueue = new QQueue<MidiEvent *>;
+    _noteQueue = new QQueue<MidiEvent *>;
 }
 
-void SenderThread::run()
-{
+void SenderThread::run() {
 
     while (true) {
         // First, send the misc events, such as control change and program change events.
@@ -47,10 +45,9 @@ void SenderThread::run()
     }
 }
 
-void SenderThread::enqueue(MidiEvent* event)
-{
+void SenderThread::enqueue(MidiEvent *event) {
     // If it is a NoteOnEvent or an OffEvent, we put it in _noteQueue.
-    if (dynamic_cast<NoteOnEvent*>(event) || dynamic_cast<OffEvent*>(event))
+    if (dynamic_cast<NoteOnEvent *>(event) || dynamic_cast<OffEvent *>(event))
         _noteQueue->push_back(event);
     // Otherwise, it goes into _eventQueue.
     else
