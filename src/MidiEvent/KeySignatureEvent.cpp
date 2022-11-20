@@ -18,32 +18,26 @@
 
 #include "KeySignatureEvent.h"
 
-KeySignatureEvent::KeySignatureEvent(int channel, int tonality, bool minor, MidiTrack* track)
-    : MidiEvent(channel, track)
-{
+KeySignatureEvent::KeySignatureEvent(int channel, int tonality, bool minor, MidiTrack *track)
+    : MidiEvent(channel, track) {
     _tonality = tonality;
     _minor = minor;
 }
 
-KeySignatureEvent::KeySignatureEvent(KeySignatureEvent& other)
-    : MidiEvent(other)
-{
+KeySignatureEvent::KeySignatureEvent(KeySignatureEvent &other) : MidiEvent(other) {
     _tonality = other._tonality;
     _minor = other._minor;
 }
 
-int KeySignatureEvent::line()
-{
+int KeySignatureEvent::line() {
     return KEY_SIGNATURE_EVENT_LINE;
 }
 
-QString KeySignatureEvent::toMessage()
-{
+QString KeySignatureEvent::toMessage() {
     return "";
 }
 
-QByteArray KeySignatureEvent::save()
-{
+QByteArray KeySignatureEvent::save() {
     QByteArray array = QByteArray();
     array.append(char(0xFF));
     array.append(0x59 | channel());
@@ -57,14 +51,12 @@ QByteArray KeySignatureEvent::save()
     return array;
 }
 
-ProtocolEntry* KeySignatureEvent::copy()
-{
+ProtocolEntry *KeySignatureEvent::copy() {
     return new KeySignatureEvent(*this);
 }
 
-void KeySignatureEvent::reloadState(ProtocolEntry* entry)
-{
-    KeySignatureEvent* other = dynamic_cast<KeySignatureEvent*>(entry);
+void KeySignatureEvent::reloadState(ProtocolEntry *entry) {
+    KeySignatureEvent *other = dynamic_cast<KeySignatureEvent *>(entry);
     if (!other) {
         return;
     }
@@ -73,37 +65,31 @@ void KeySignatureEvent::reloadState(ProtocolEntry* entry)
     _minor = other->_minor;
 }
 
-QString KeySignatureEvent::typeString()
-{
+QString KeySignatureEvent::typeString() {
     return "Key Signature Event";
 }
 
-int KeySignatureEvent::tonality()
-{
+int KeySignatureEvent::tonality() {
     return _tonality;
 }
 
-bool KeySignatureEvent::minor()
-{
+bool KeySignatureEvent::minor() {
     return _minor;
 }
 
-void KeySignatureEvent::setTonality(int t)
-{
-    ProtocolEntry* toCopy = copy();
+void KeySignatureEvent::setTonality(int t) {
+    ProtocolEntry *toCopy = copy();
     _tonality = t;
     protocol(toCopy, this);
 }
 
-void KeySignatureEvent::setMinor(bool minor)
-{
-    ProtocolEntry* toCopy = copy();
+void KeySignatureEvent::setMinor(bool minor) {
+    ProtocolEntry *toCopy = copy();
     _minor = minor;
     protocol(toCopy, this);
 }
 
-QString KeySignatureEvent::toString(int tonality, bool minor)
-{
+QString KeySignatureEvent::toString(int tonality, bool minor) {
 
     QString text = "";
 

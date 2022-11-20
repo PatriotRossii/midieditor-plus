@@ -27,17 +27,17 @@
 
 class KeyPressureEvent : public MidiEvent {
 
-public:
-    KeyPressureEvent(int channel, int value, int note, MidiTrack* track);
-    KeyPressureEvent(KeyPressureEvent& other);
+  public:
+    KeyPressureEvent(int channel, int value, int note, MidiTrack *track);
+    KeyPressureEvent(KeyPressureEvent &other);
 
     virtual int line();
 
     QString toMessage();
     QByteArray save();
 
-    virtual ProtocolEntry* copy();
-    virtual void reloadState(ProtocolEntry* entry);
+    virtual ProtocolEntry *copy();
+    virtual void reloadState(ProtocolEntry *entry);
 
     QString typeString();
 
@@ -46,7 +46,7 @@ public:
     void setValue(int v);
     void setNote(int n);
 
-private:
+  private:
     int _value, _note;
 };
 

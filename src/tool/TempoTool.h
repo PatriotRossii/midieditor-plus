@@ -5,11 +5,11 @@
 
 class TempoTool : public EventTool {
 
-public:
+  public:
     TempoTool();
-    TempoTool(TempoTool& other);
+    TempoTool(TempoTool &other);
 
-    void draw(QPainter* painter);
+    void draw(QPainter *painter);
 
     bool press(bool leftClick);
     bool release();
@@ -17,10 +17,10 @@ public:
 
     bool move(int mouseX, int mouseY);
 
-    ProtocolEntry* copy();
-    void reloadState(ProtocolEntry* entry);
+    ProtocolEntry *copy();
+    void reloadState(ProtocolEntry *entry);
 
-private:
+  private:
     int _startX;
 };
 

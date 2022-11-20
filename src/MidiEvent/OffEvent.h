@@ -27,35 +27,35 @@ class OnEvent;
 
 class OffEvent : public MidiEvent {
 
-public:
-    OffEvent(int ch, int line, MidiTrack* track);
-    OffEvent(OffEvent& other);
+  public:
+    OffEvent(int ch, int line, MidiTrack *track);
+    OffEvent(OffEvent &other);
 
-    void setOnEvent(OnEvent* event);
-    OnEvent* onEvent();
+    void setOnEvent(OnEvent *event);
+    OnEvent *onEvent();
 
-    static void enterOnEvent(OnEvent* event);
+    static void enterOnEvent(OnEvent *event);
     static void clearOnEvents();
-    static void removeOnEvent(OnEvent* event);
-    static QList<OnEvent*> corruptedOnEvents();
-    void draw(QPainter* p, QColor c);
+    static void removeOnEvent(OnEvent *event);
+    static QList<OnEvent *> corruptedOnEvents();
+    void draw(QPainter *p, QColor c);
     int line();
     QByteArray save();
     QString toMessage();
 
-    ProtocolEntry* copy();
-    void reloadState(ProtocolEntry* entry);
+    ProtocolEntry *copy();
+    void reloadState(ProtocolEntry *entry);
 
     void setMidiTime(int t, bool toProtocol = true);
 
     virtual bool isOnEvent();
 
-protected:
-    OnEvent* _onEvent;
+  protected:
+    OnEvent *_onEvent;
 
     // Saves all openes and not closed onEvents. When an offEvent is created,
     // it searches his onEvent in onEvents and removes it from onEvents.
-    static QMultiMap<int, OnEvent*>* onEvents;
+    static QMultiMap<int, OnEvent *> *onEvents;
 
     // needs to save the line, because offEvents are bound to their onEvents.
     // Setting the line is necessary to find the onEvent in the QMap

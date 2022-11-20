@@ -24,9 +24,7 @@
 #include "../protocol/Protocol.h"
 #include "StandardTool.h"
 
-SelectTool::SelectTool(int type)
-    : EventTool()
-{
+SelectTool::SelectTool(int type) : EventTool() {
     stool_type = type;
     x_rect = 0;
     y_rect = 0;
@@ -54,16 +52,13 @@ SelectTool::SelectTool(int type)
     }
 }
 
-SelectTool::SelectTool(SelectTool& other)
-    : EventTool(other)
-{
+SelectTool::SelectTool(SelectTool &other) : EventTool(other) {
     stool_type = other.stool_type;
     x_rect = 0;
     y_rect = 0;
 }
 
-void SelectTool::draw(QPainter* painter)
-{
+void SelectTool::draw(QPainter *painter) {
     paintSelectedEvents(painter);
     if (SELECTION_TYPE_BOX && (x_rect || y_rect)) {
         painter->setPen(Qt::gray);
@@ -83,8 +78,7 @@ void SelectTool::draw(QPainter* painter)
     }
 }
 
-bool SelectTool::press(bool leftClick)
-{
+bool SelectTool::press(bool leftClick) {
     Q_UNUSED(leftClick);
     if (stool_type == SELECTION_TYPE_BOX) {
         y_rect = mouseY;
@@ -93,16 +87,16 @@ bool SelectTool::press(bool leftClick)
     return true;
 }
 
-bool SelectTool::release()
-{
+bool SelectTool::release() {
 
     if (!file()) {
         return false;
     }
     file()->protocol()->startNewAction("Selection changed", image());
-    ProtocolEntry* toCopy = copy();
+    ProtocolEntry *toCopy = copy();
 
-    if (!QApplication::keyboardModifiers().testFlag(Qt::ShiftModifier) && !QApplication::keyboardModifiers().testFlag(Qt::ControlModifier)) {
+    if (!QApplication::keyboardModifiers().testFlag(Qt::ShiftModifier) &&
+        !QApplication::keyboardModifiers().testFlag(Qt::ControlModifier)) {
         clearSelection();
     }
 
@@ -129,7 +123,7 @@ bool SelectTool::release()
             x_end = mouseX + 1;
             y_end = mouseY + 1;
         }
-        foreach (MidiEvent* event, *(matrixWidget->activeEvents())) {
+        foreach (MidiEvent *event, *(matrixWidget->activeEvents())) {
             if (inRect(event, x_start, y_start, x_end, y_end)) {
                 selectEvent(event, false);
             }
@@ -144,7 +138,7 @@ bool SelectTool::release()
             end = file()->endTick();
             start = tick;
         }
-        foreach (MidiEvent* event, *(file()->eventsBetween(start, end))) {
+        foreach (MidiEvent *event, *(file()->eventsBetween(start, end))) {
             selectEvent(event, false);
         }
     }
@@ -162,25 +156,26 @@ bool SelectTool::release()
     return true;
 }
 
-bool SelectTool::inRect(MidiEvent* event, int x_start, int y_start, int x_end, int y_end)
-{
-    return pointInRect(event->x(), event->y(), x_start, y_start, x_end, y_end) || pointInRect(event->x(), event->y() + event->height(), x_start, y_start, x_end, y_end) || pointInRect(event->x() + event->width(), event->y(), x_start, y_start, x_end, y_end) || pointInRect(event->x() + event->width(), event->y() + event->height(), x_start, y_start, x_end, y_end) || pointInRect(x_start, y_start, event->x(), event->y(), event->x() + event->width(), event->y() + event->height());
+bool SelectTool::inRect(MidiEvent *event, int x_start, int y_start, int x_end, int y_end) {
+    return pointInRect(event->x(), event->y(), x_start, y_start, x_end, y_end) ||
+           pointInRect(event->x(), event->y() + event->height(), x_start, y_start, x_end, y_end) ||
+           pointInRect(event->x() + event->width(), event->y(), x_start, y_start, x_end, y_end) ||
+           pointInRect(event->x() + event->width(), event->y() + event->height(), x_start, y_start, x_end, y_end) ||
+           pointInRect(x_start, y_start, event->x(), event->y(), event->x() + event->width(),
+                       event->y() + event->height());
 }
 
-bool SelectTool::move(int mouseX, int mouseY)
-{
+bool SelectTool::move(int mouseX, int mouseY) {
     EditorTool::move(mouseX, mouseY);
     return true;
 }
 
-ProtocolEntry* SelectTool::copy()
-{
+ProtocolEntry *SelectTool::copy() {
     return new SelectTool(*this);
 }
 
-void SelectTool::reloadState(ProtocolEntry* entry)
-{
-    SelectTool* other = dynamic_cast<SelectTool*>(entry);
+void SelectTool::reloadState(ProtocolEntry *entry) {
+    SelectTool *other = dynamic_cast<SelectTool *>(entry);
     if (!other) {
         return;
     }
@@ -190,12 +185,10 @@ void SelectTool::reloadState(ProtocolEntry* entry)
     stool_type = other->stool_type;
 }
 
-bool SelectTool::releaseOnly()
-{
+bool SelectTool::releaseOnly() {
     return release();
 }
 
-bool SelectTool::showsSelection()
-{
+bool SelectTool::showsSelection() {
     return true;
 }

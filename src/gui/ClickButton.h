@@ -28,20 +28,20 @@ class ClickButton : public QPushButton {
 
     Q_OBJECT
 
-public:
-    ClickButton(QString imageName, QWidget* parent = 0);
+  public:
+    ClickButton(QString imageName, QWidget *parent = 0);
     void setImageName(QString imageName);
 
-public slots:
+  public slots:
     void buttonClick();
 
-protected:
-    void paintEvent(QPaintEvent* event);
-    void enterEvent(QEvent* event);
-    void leaveEvent(QEvent* event);
+  protected:
+    void paintEvent(QPaintEvent *event);
+    void enterEvent(QEvent *event);
+    void leaveEvent(QEvent *event);
 
-private:
+  private:
     bool button_mouseInButton, button_mouseClicked;
-    QImage* image;
+    QImage *image;
 };
 #endif

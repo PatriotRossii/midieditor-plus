@@ -29,11 +29,11 @@ class AboutDialog : public QDialog {
 
     Q_OBJECT
 
-public:
-    AboutDialog(QWidget* parent = 0);
+  public:
+    AboutDialog(QWidget *parent = 0);
 
-private:
-    QList<QString>* loadContributors();
+  private:
+    QList<QString> *loadContributors();
 };
 
 #endif

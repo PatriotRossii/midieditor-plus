@@ -29,13 +29,13 @@ class RemoteSettingsWidget : public SettingsWidget {
 
     Q_OBJECT
 
-public:
-    RemoteSettingsWidget(RemoteServer* server, QWidget* parent = 0);
+  public:
+    RemoteSettingsWidget(RemoteServer *server, QWidget *parent = 0);
 
     bool accept();
 
-private:
-    RemoteServer* _server;
+  private:
+    RemoteServer *_server;
 
     QLineEdit *_ipField, *_portField;
 };

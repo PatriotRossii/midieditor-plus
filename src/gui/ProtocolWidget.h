@@ -29,20 +29,20 @@ class ProtocolWidget : public QListWidget {
 
     Q_OBJECT
 
-public:
-    ProtocolWidget(QWidget* parent = 0);
-    void setFile(MidiFile* f);
+  public:
+    ProtocolWidget(QWidget *parent = 0);
+    void setFile(MidiFile *f);
 
-public slots:
+  public slots:
     void protocolChanged();
     void update();
-    void stepClicked(QListWidgetItem* item);
+    void stepClicked(QListWidgetItem *item);
 
-private:
-    MidiFile* file;
+  private:
+    MidiFile *file;
     bool protocolHasChanged, nextChangeFromList;
 
-    //protected:
+    // protected:
     //	void paintEvent(QPaintEvent *event);
 };
 

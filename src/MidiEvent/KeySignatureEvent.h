@@ -23,17 +23,17 @@
 
 class KeySignatureEvent : public MidiEvent {
 
-public:
-    KeySignatureEvent(int channel, int tonality, bool minor, MidiTrack* track);
-    KeySignatureEvent(KeySignatureEvent& other);
+  public:
+    KeySignatureEvent(int channel, int tonality, bool minor, MidiTrack *track);
+    KeySignatureEvent(KeySignatureEvent &other);
 
     virtual int line();
 
     QString toMessage();
     QByteArray save();
 
-    virtual ProtocolEntry* copy();
-    virtual void reloadState(ProtocolEntry* entry);
+    virtual ProtocolEntry *copy();
+    virtual void reloadState(ProtocolEntry *entry);
 
     QString typeString();
 
@@ -44,7 +44,7 @@ public:
 
     static QString toString(int tonality, bool minor);
 
-private:
+  private:
     int _tonality;
     bool _minor;
 };

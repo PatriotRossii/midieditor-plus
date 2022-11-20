@@ -29,12 +29,12 @@ class QCheckBox;
 
 class AutomaticUpdateDialog : public QDialog {
 
-  Q_OBJECT
+    Q_OBJECT
 
-public:
-  AutomaticUpdateDialog(QWidget *parent = 0);
+  public:
+    AutomaticUpdateDialog(QWidget *parent = 0);
 
-public slots:
+  public slots:
     void enableAutoUpdates();
 };
 

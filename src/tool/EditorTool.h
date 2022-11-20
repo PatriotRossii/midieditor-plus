@@ -40,118 +40,118 @@ class MainWindow;
  */
 class EditorTool : public Tool {
 
-public:
+  public:
     /**
-		 * \brief creates a new EditorTool.
-		 */
+     * \brief creates a new EditorTool.
+     */
     EditorTool();
 
     /**
-		 * \brief creates a new EditorTool copying &other.
-		 */
-    EditorTool(EditorTool& other);
+     * \brief creates a new EditorTool copying &other.
+     */
+    EditorTool(EditorTool &other);
 
     /**
-		 * \brief draws the EditorTools data to painter.
-		 */
-    virtual void draw(QPainter* painter);
+     * \brief draws the EditorTools data to painter.
+     */
+    virtual void draw(QPainter *painter);
 
     /**
-		 * \brief this method is called when the mouse is clicked above the
-		 * Widget.
-		 *
-		 * Returns wether the Widget has to be repainted after the Tools
-		 * action
-		 */
+     * \brief this method is called when the mouse is clicked above the
+     * Widget.
+     *
+     * Returns wether the Widget has to be repainted after the Tools
+     * action
+     */
     virtual bool press(bool leftClick);
 
     /**
-		 * \brief this method is called when a key is pressed while the
-		 * Widget is focused.
-		 *
-		 * Returns wether the Widget has to be repainted after the Tools
-		 * action
-		 */
+     * \brief this method is called when a key is pressed while the
+     * Widget is focused.
+     *
+     * Returns wether the Widget has to be repainted after the Tools
+     * action
+     */
     virtual bool pressKey(int key);
 
     /**
-		 * \brief this method is called when a key is released while the
-		 * Widget is focused.
-		 *
-		 * Returns wether the Widget has to be repainted after the Tools
-		 * action
-		 */
+     * \brief this method is called when a key is released while the
+     * Widget is focused.
+     *
+     * Returns wether the Widget has to be repainted after the Tools
+     * action
+     */
     virtual bool releaseKey(int key);
 
     /**
-		 * \brief this method is called when the mouse is released above the
-		 * Widget.
-		 *
-		 * Returns wether the Widget has to be repainted after the Tools
-		 * action
-		 */
+     * \brief this method is called when the mouse is released above the
+     * Widget.
+     *
+     * Returns wether the Widget has to be repainted after the Tools
+     * action
+     */
     virtual bool release();
 
     /**
-		 * \brief this method is called when the mouse is released above the
-		 * Widget and the releaseAction should not be called.
-		 *
-		 * Returns wether the Widget has to be repainted after the Tools
-		 * action
-		 */
+     * \brief this method is called when the mouse is released above the
+     * Widget and the releaseAction should not be called.
+     *
+     * Returns wether the Widget has to be repainted after the Tools
+     * action
+     */
     virtual bool releaseOnly();
 
     /**
-		 * \brief this method is called when the mouse is moved above the
-		 * Widget.
-		 *
-		 * Returns wether the Widget has to be repainted after the Tools
-		 * action
-		 */
+     * \brief this method is called when the mouse is moved above the
+     * Widget.
+     *
+     * Returns wether the Widget has to be repainted after the Tools
+     * action
+     */
     virtual bool move(int mouseX, int mouseY);
 
     /**
-		 * \brief this method is called when the mouse has exited the Widget.
-		 */
+     * \brief this method is called when the mouse has exited the Widget.
+     */
     virtual void exit();
 
     /**
-		 * \brief this method is called when the mouse has entered the Widget.
-		 */
+     * \brief this method is called when the mouse has entered the Widget.
+     */
     virtual void enter();
 
     /**
-		 * \brief deselects this Tool.
-		 *
-		 * Repaints the Tools Button (if existing)
-		 */
+     * \brief deselects this Tool.
+     *
+     * Repaints the Tools Button (if existing)
+     */
     void deselect();
 
     /**
-		 * \brief selects this Tool.
-		 *
-		 * Repaints the Tools Button (if existing)
-		 */
+     * \brief selects this Tool.
+     *
+     * Repaints the Tools Button (if existing)
+     */
     void select();
 
     bool selected();
 
     virtual void buttonClick();
 
-    virtual ProtocolEntry* copy();
+    virtual ProtocolEntry *copy();
 
-    virtual void reloadState(ProtocolEntry* entry);
-    static void setMatrixWidget(MatrixWidget* w);
-    static void setMainWindow(MainWindow* mw);
+    virtual void reloadState(ProtocolEntry *entry);
+    static void setMatrixWidget(MatrixWidget *w);
+    static void setMainWindow(MainWindow *mw);
 
     bool pointInRect(int x, int y, int x_start, int y_start, int x_end, int y_end);
 
-protected:
+  protected:
     bool etool_selected;
     int mouseX, mouseY;
     bool mouseIn;
-    static MatrixWidget* matrixWidget;
-    static MainWindow* _mainWindow;
+    static MatrixWidget *matrixWidget;
+    static MainWindow *_mainWindow;
 };
 
 #endif

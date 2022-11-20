@@ -5,11 +5,11 @@
 
 class MeasureTool : public EventTool {
 
-public:
+  public:
     MeasureTool();
-    MeasureTool(MeasureTool& other);
+    MeasureTool(MeasureTool &other);
 
-    void draw(QPainter* painter);
+    void draw(QPainter *painter);
 
     bool press(bool leftClick);
     bool release();
@@ -18,10 +18,10 @@ public:
 
     bool move(int mouseX, int mouseY);
 
-    ProtocolEntry* copy();
-    void reloadState(ProtocolEntry* entry);
+    ProtocolEntry *copy();
+    void reloadState(ProtocolEntry *entry);
 
-private:
+  private:
     int _firstSelectedMeasure, _secondSelectedMeasure;
 
     int closestMeasureStart(int *distX, int *measureX);

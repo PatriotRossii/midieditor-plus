@@ -26,13 +26,12 @@
 
 #include "Metronome.h"
 
-PlayerThread* MidiPlayer::filePlayer = new PlayerThread();
+PlayerThread *MidiPlayer::filePlayer = new PlayerThread();
 bool MidiPlayer::playing = false;
-SingleNotePlayer* MidiPlayer::singleNotePlayer = new SingleNotePlayer();
+SingleNotePlayer *MidiPlayer::singleNotePlayer = new SingleNotePlayer();
 double MidiPlayer::_speed = 1;
 
-void MidiPlayer::play(MidiFile* file)
-{
+void MidiPlayer::play(MidiFile *file) {
 
     if (isPlaying()) {
         stop();
@@ -42,16 +41,14 @@ void MidiPlayer::play(MidiFile* file)
     delete filePlayer;
     filePlayer = new PlayerThread();
 
-    connect(MidiPlayer::playerThread(),
-        SIGNAL(measureChanged(int, int)), Metronome::instance(), SLOT(measureUpdate(int, int)));
-    connect(MidiPlayer::playerThread(),
-        SIGNAL(measureUpdate(int, int)), Metronome::instance(), SLOT(measureUpdate(int, int)));
-    connect(MidiPlayer::playerThread(),
-        SIGNAL(meterChanged(int, int)), Metronome::instance(), SLOT(meterChanged(int, int)));
-    connect(MidiPlayer::playerThread(),
-        SIGNAL(playerStopped()), Metronome::instance(), SLOT(playbackStopped()));
-    connect(MidiPlayer::playerThread(),
-        SIGNAL(playerStarted()), Metronome::instance(), SLOT(playbackStarted()));
+    connect(MidiPlayer::playerThread(), SIGNAL(measureChanged(int, int)), Metronome::instance(),
+            SLOT(measureUpdate(int, int)));
+    connect(MidiPlayer::playerThread(), SIGNAL(measureUpdate(int, int)), Metronome::instance(),
+            SLOT(measureUpdate(int, int)));
+    connect(MidiPlayer::playerThread(), SIGNAL(meterChanged(int, int)), Metronome::instance(),
+            SLOT(meterChanged(int, int)));
+    connect(MidiPlayer::playerThread(), SIGNAL(playerStopped()), Metronome::instance(), SLOT(playbackStopped()));
+    connect(MidiPlayer::playerThread(), SIGNAL(playerStarted()), Metronome::instance(), SLOT(playbackStarted()));
 #endif
 
     int tickFrom = file->cursorTick();
@@ -64,34 +61,28 @@ void MidiPlayer::play(MidiFile* file)
     playing = true;
 }
 
-void MidiPlayer::play(NoteOnEvent* event)
-{
+void MidiPlayer::play(NoteOnEvent *event) {
     singleNotePlayer->play(event);
 }
 
-void MidiPlayer::stop()
-{
+void MidiPlayer::stop() {
     playing = false;
     filePlayer->stop();
 }
 
-bool MidiPlayer::isPlaying()
-{
+bool MidiPlayer::isPlaying() {
     return playing;
 }
 
-int MidiPlayer::timeMs()
-{
+int MidiPlayer::timeMs() {
     return filePlayer->timeMs();
 }
 
-PlayerThread* MidiPlayer::playerThread()
-{
+PlayerThread *MidiPlayer::playerThread() {
     return filePlayer;
 }
 
-void MidiPlayer::panic()
-{
+void MidiPlayer::panic() {
 
     // set all cannels note off / sounds off
     for (int i = 0; i < 16; i++) {
@@ -122,12 +113,10 @@ void MidiPlayer::panic()
     }
 }
 
-double MidiPlayer::speedScale()
-{
+double MidiPlayer::speedScale() {
     return _speed;
 }
 
-void MidiPlayer::setSpeedScale(double d)
-{
+void MidiPlayer::setSpeedScale(double d) {
     _speed = d;
 }

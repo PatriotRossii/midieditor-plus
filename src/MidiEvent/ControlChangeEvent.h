@@ -23,9 +23,9 @@
 
 class ControlChangeEvent : public MidiEvent {
 
-public:
-    ControlChangeEvent(int channel, int contr, int val, MidiTrack* track);
-    ControlChangeEvent(ControlChangeEvent& other);
+  public:
+    ControlChangeEvent(int channel, int contr, int val, MidiTrack *track);
+    ControlChangeEvent(ControlChangeEvent &other);
 
     virtual int line();
     int control();
@@ -36,14 +36,14 @@ public:
     QString toMessage();
     QByteArray save();
 
-    virtual ProtocolEntry* copy();
-    virtual void reloadState(ProtocolEntry* entry);
+    virtual ProtocolEntry *copy();
+    virtual void reloadState(ProtocolEntry *entry);
 
     QString typeString();
 
     virtual bool isOnEvent();
 
-private:
+  private:
     int _control, _value;
 };
 

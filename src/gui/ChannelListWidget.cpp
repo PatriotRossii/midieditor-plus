@@ -32,15 +32,13 @@
 
 #define ROW_HEIGHT 85
 
-ChannelListItem::ChannelListItem(int ch, ChannelListWidget* parent)
-    : QWidget(parent)
-{
+ChannelListItem::ChannelListItem(int ch, ChannelListWidget *parent) : QWidget(parent) {
 
     channelList = parent;
     channel = ch;
 
     setContentsMargins(0, 0, 0, 0);
-    QGridLayout* layout = new QGridLayout(this);
+    QGridLayout *layout = new QGridLayout(this);
     setLayout(layout);
     layout->setVerticalSpacing(1);
 
@@ -50,7 +48,7 @@ ChannelListItem::ChannelListItem(int ch, ChannelListWidget* parent)
     if (channel == 16) {
         text = "General Events";
     }
-    QLabel* text1 = new QLabel(text, this);
+    QLabel *text1 = new QLabel(text, this);
     text1->setFixedHeight(15);
     layout->addWidget(text1, 0, 1, 1, 1);
 
@@ -58,14 +56,15 @@ ChannelListItem::ChannelListItem(int ch, ChannelListWidget* parent)
     instrumentLabel->setFixedHeight(15);
     layout->addWidget(instrumentLabel, 1, 1, 1, 1);
 
-    QToolBar* toolBar = new QToolBar(this);
+    QToolBar *toolBar = new QToolBar(this);
     toolBar->setIconSize(QSize(12, 12));
     QPalette palette = toolBar->palette();
     palette.setColor(QPalette::Background, Qt::white);
     toolBar->setPalette(palette);
 
     // visibility
-    visibleAction = new QAction(QIcon(":/run_environment/graphics/channelwidget/visible.png"), "Channel visible", toolBar);
+    visibleAction =
+        new QAction(QIcon(":/run_environment/graphics/channelwidget/visible.png"), "Channel visible", toolBar);
     visibleAction->setCheckable(true);
     visibleAction->setChecked(true);
     toolBar->addAction(visibleAction);
@@ -73,7 +72,8 @@ ChannelListItem::ChannelListItem(int ch, ChannelListWidget* parent)
 
     // audibility
     if (channel < 16) {
-        loudAction = new QAction(QIcon(":/run_environment/graphics/channelwidget/loud.png"), "Channel audible", toolBar);
+        loudAction =
+            new QAction(QIcon(":/run_environment/graphics/channelwidget/loud.png"), "Channel audible", toolBar);
         loudAction->setCheckable(true);
         loudAction->setChecked(true);
         toolBar->addAction(loudAction);
@@ -89,7 +89,8 @@ ChannelListItem::ChannelListItem(int ch, ChannelListWidget* parent)
         toolBar->addSeparator();
 
         // instrument
-        QAction* instrumentAction = new QAction(QIcon(":/run_environment/graphics/channelwidget/instrument.png"), "Select instrument", toolBar);
+        QAction *instrumentAction =
+            new QAction(QIcon(":/run_environment/graphics/channelwidget/instrument.png"), "Select instrument", toolBar);
         toolBar->addAction(instrumentAction);
         connect(instrumentAction, SIGNAL(triggered()), this, SLOT(instrument()));
     }
@@ -101,8 +102,7 @@ ChannelListItem::ChannelListItem(int ch, ChannelListWidget* parent)
     setFixedHeight(ROW_HEIGHT);
 }
 
-void ChannelListItem::toggleVisibility(bool visible)
-{
+void ChannelListItem::toggleVisibility(bool visible) {
     QString text = "Hide channel";
     if (visible) {
         text = "Show channel";
@@ -113,8 +113,7 @@ void ChannelListItem::toggleVisibility(bool visible)
     emit channelStateChanged();
 }
 
-void ChannelListItem::toggleAudibility(bool audible)
-{
+void ChannelListItem::toggleAudibility(bool audible) {
     QString text = "Mute channel";
     if (audible) {
         text = "Channel audible";
@@ -125,8 +124,7 @@ void ChannelListItem::toggleAudibility(bool audible)
     emit channelStateChanged();
 }
 
-void ChannelListItem::toggleSolo(bool solo)
-{
+void ChannelListItem::toggleSolo(bool solo) {
     QString text = "Enter solo mode";
     if (!solo) {
         text = "Exited solo mode";
@@ -137,15 +135,14 @@ void ChannelListItem::toggleSolo(bool solo)
     emit channelStateChanged();
 }
 
-void ChannelListItem::instrument()
-{
+void ChannelListItem::instrument() {
     emit selectInstrumentClicked(channel);
 }
 
-void ChannelListItem::onBeforeUpdate()
-{
+void ChannelListItem::onBeforeUpdate() {
 
-    QString text = MidiFile::instrumentName(channelList->midiFile()->channel(channel)->progAtTick(channelList->midiFile()->cursorTick()));
+    QString text = MidiFile::instrumentName(
+        channelList->midiFile()->channel(channel)->progAtTick(channelList->midiFile()->cursorTick()));
     if (channel == 16) {
         text = "Events affecting all channels";
     }
@@ -179,16 +176,14 @@ void ChannelListItem::onBeforeUpdate()
     }
 }
 
-ChannelListWidget::ChannelListWidget(QWidget* parent)
-    : QListWidget(parent)
-{
+ChannelListWidget::ChannelListWidget(QWidget *parent) : QListWidget(parent) {
 
     setSelectionMode(QAbstractItemView::NoSelection);
     setStyleSheet("QListWidget::item { border-bottom: 1px solid lightGray; }");
 
     for (int channel = 0; channel < 17; channel++) {
-        ChannelListItem* widget = new ChannelListItem(channel, this);
-        QListWidgetItem* item = new QListWidgetItem();
+        ChannelListItem *widget = new ChannelListItem(channel, this);
+        QListWidgetItem *item = new QListWidgetItem();
         item->setSizeHint(QSize(0, ROW_HEIGHT));
         addItem(item);
         setItemWidget(item, widget);
@@ -201,24 +196,21 @@ ChannelListWidget::ChannelListWidget(QWidget* parent)
     file = 0;
 }
 
-void ChannelListWidget::setFile(MidiFile* f)
-{
+void ChannelListWidget::setFile(MidiFile *f) {
     file = f;
     connect(file->protocol(), SIGNAL(actionFinished()), this, SLOT(update()));
     update();
 }
 
-void ChannelListWidget::update()
-{
+void ChannelListWidget::update() {
 
-    foreach (ChannelListItem* item, items) {
+    foreach (ChannelListItem *item, items) {
         item->onBeforeUpdate();
     }
 
     QListWidget::update();
 }
 
-MidiFile* ChannelListWidget::midiFile()
-{
+MidiFile *ChannelListWidget::midiFile() {
     return file;
 }

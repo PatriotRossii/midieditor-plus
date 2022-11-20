@@ -26,14 +26,14 @@
 
 class SenderThread : public QThread {
 
-public:
+  public:
     SenderThread();
     void run();
-    void enqueue(MidiEvent* event);
+    void enqueue(MidiEvent *event);
 
-private:
-    QQueue<MidiEvent*>* _eventQueue;
-    QQueue<MidiEvent*>* _noteQueue;
+  private:
+    QQueue<MidiEvent *> *_eventQueue;
+    QQueue<MidiEvent *> *_noteQueue;
 };
 
 #endif

@@ -35,33 +35,31 @@
 #endif
 #include "UpdateSettingsWidget.h"
 
-SettingsDialog::SettingsDialog(QString title, QSettings* settings, RemoteServer* server, QWidget* parent)
-    : QDialog(parent)
-{
+SettingsDialog::SettingsDialog(QString title, QSettings *settings, RemoteServer *server, QWidget *parent)
+    : QDialog(parent) {
 
     setWindowTitle(title);
 
-    _settingsWidgets = new QList<SettingsWidget*>;
+    _settingsWidgets = new QList<SettingsWidget *>;
 
     setMinimumHeight(400);
 
-    QGridLayout* layout = new QGridLayout(this);
+    QGridLayout *layout = new QGridLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     setLayout(layout);
 
     setModal(true);
 
     // the central widget
-    QWidget* central = new QWidget(this);
-    QGridLayout* centralLayout = new QGridLayout(central);
+    QWidget *central = new QWidget(this);
+    QGridLayout *centralLayout = new QGridLayout(central);
     central->setLayout(centralLayout);
 
     // the list on the left side
     _listWidget = new QListWidget(central);
     _listWidget->setFixedWidth(170);
 
-    connect(_listWidget, SIGNAL(currentRowChanged(int)), this,
-        SLOT(rowChanged(int)));
+    connect(_listWidget, SIGNAL(currentRowChanged(int)), this, SLOT(rowChanged(int)));
 
     centralLayout->addWidget(_listWidget, 0, 0, 1, 1);
 
@@ -78,13 +76,13 @@ SettingsDialog::SettingsDialog(QString title, QSettings* settings, RemoteServer*
     layout->setRowStretch(1, 1);
 
     // buttons
-    QWidget* buttonBar = new QWidget(this);
-    QGridLayout* buttonLayout = new QGridLayout(buttonBar);
+    QWidget *buttonBar = new QWidget(this);
+    QGridLayout *buttonLayout = new QGridLayout(buttonBar);
 
     buttonBar->setLayout(buttonLayout);
 
     // ok
-    QPushButton* ok = new QPushButton("Close", buttonBar);
+    QPushButton *ok = new QPushButton("Close", buttonBar);
     buttonLayout->addWidget(ok, 0, 2, 1, 1);
     connect(ok, SIGNAL(clicked()), this, SLOT(submit()));
 
@@ -101,14 +99,13 @@ SettingsDialog::SettingsDialog(QString title, QSettings* settings, RemoteServer*
     addSetting(new UpdateSettingsWidget(settings, central));
 }
 
-void SettingsDialog::addSetting(SettingsWidget* settingWidget)
-{
+void SettingsDialog::addSetting(SettingsWidget *settingWidget) {
 
     _settingsWidgets->append(settingWidget);
     _container->addWidget(settingWidget);
 
     // create the new ListEntry
-    QListWidgetItem* newItem = new QListWidgetItem(settingWidget->title());
+    QListWidgetItem *newItem = new QListWidgetItem(settingWidget->title());
     newItem->setIcon(settingWidget->icon());
     _listWidget->addItem(newItem);
 
@@ -119,8 +116,7 @@ void SettingsDialog::addSetting(SettingsWidget* settingWidget)
     }
 }
 
-void SettingsDialog::rowChanged(int row)
-{
+void SettingsDialog::rowChanged(int row) {
     int oldIndex = _container->currentIndex();
     if (_settingsWidgets->at(oldIndex)) {
         if (!_settingsWidgets->at(oldIndex)->accept()) {
@@ -130,8 +126,7 @@ void SettingsDialog::rowChanged(int row)
     _container->setCurrentIndex(row);
 }
 
-void SettingsDialog::submit()
-{
+void SettingsDialog::submit() {
     int oldIndex = _container->currentIndex();
     if (_settingsWidgets->at(oldIndex)) {
         if (!_settingsWidgets->at(oldIndex)->accept()) {

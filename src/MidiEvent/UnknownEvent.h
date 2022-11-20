@@ -24,9 +24,9 @@
 
 class UnknownEvent : public MidiEvent {
 
-public:
-    UnknownEvent(int channel, int type, QByteArray data, MidiTrack* track);
-    UnknownEvent(UnknownEvent& other);
+  public:
+    UnknownEvent(int channel, int type, QByteArray data, MidiTrack *track);
+    UnknownEvent(UnknownEvent &other);
     QByteArray data();
     int line();
     QByteArray save();
@@ -34,10 +34,10 @@ public:
     void setType(int type);
     void setData(QByteArray d);
 
-    virtual ProtocolEntry* copy();
-    virtual void reloadState(ProtocolEntry* entry);
+    virtual ProtocolEntry *copy();
+    virtual void reloadState(ProtocolEntry *entry);
 
-private:
+  private:
     QByteArray _data;
     int _type;
 };
